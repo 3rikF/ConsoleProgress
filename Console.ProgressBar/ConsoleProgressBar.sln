@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Console.ProgressBar", "Console.ProgressBar\Console.ProgressBar.csproj", "{026051A5-9A68-42B4-A1C0-3816CC123494}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleProgressBar", "ConsoleProgressBar\ConsoleProgressBar.csproj", "{026051A5-9A68-42B4-A1C0-3816CC123494}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
