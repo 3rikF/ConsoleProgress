@@ -2,6 +2,6 @@
 # Diese .gitignore-Datei wurde von Microsoft(R) Visual Studio automatisch erstellt.
 ################################################################################
 
-/Console.ProgressBar/.vs
-/Console.ProgressBar/ConsoleProgressBar/bin
-/Console.ProgressBar/ConsoleProgressBar/obj
+/ConsoleProgressBar/.vs
+/ConsoleProgressBar/ConsoleProgressBar/bin
+/ConsoleProgressBar/ConsoleProgressBar/obj
