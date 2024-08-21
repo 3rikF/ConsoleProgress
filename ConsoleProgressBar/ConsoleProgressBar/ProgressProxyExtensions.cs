@@ -33,7 +33,7 @@ public static class ProgressProxyExtensions
 		return progress;
 	}
 
-	internal static ProgressProxy<T> DebugMode<T>(this ProgressProxy<T> progress)
+	internal static ProgressProxy<T> WithDebugMode<T>(this ProgressProxy<T> progress)
 	{
 		progress.DebugFlag = true;
 		return progress;

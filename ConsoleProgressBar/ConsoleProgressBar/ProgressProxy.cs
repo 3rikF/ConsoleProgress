@@ -21,14 +21,10 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 		{ get; set; }
 
 	protected string? ActionDesc
-	{
-		get; private set;
-	} = action;
+		{ get; private set; } = action;
 
 	protected string? ItemDesc
-	{
-		get; private set;
-	} = item;
+		{ get; private set; } = item;
 
 	/// <summary>
 	/// Mainly for debugging purposes, to prematurely

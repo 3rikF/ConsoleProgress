@@ -7,9 +7,7 @@ namespace ConsoleProgressBar;
 public static class ConsoleProgressExtensions
 {
 	public static ConsoleProgressHandler<T> ConsoleProgress<T>(this IEnumerable<T> consoleProgress)
-	{
-		return new ConsoleProgressHandler<T>(consoleProgress);
-	}
+		=> new (consoleProgress);
 
 	public static ConsoleProgressHandler<T> WithColor<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleColor activeBar)
 	{
