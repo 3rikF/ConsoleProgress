@@ -37,18 +37,26 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	public int? CancelAfter
 		{ get; internal set; }
 
+	internal bool DebugFlag
+		{ get; set; }
+
 	#endregion Properties
 
 	//-------------------------------------------------------------------------------------------------------------
 	#region Methods
 
-	protected virtual void InitProgress()
+	internal void UpdateTotalStepsIfUnset()
 	{
 		if (TotalSteps is null)
 		{
 			TotalSteps	= _collection.TryGetNonEnumeratedCount(out int count) ? count : _collection.Count();
 			TotalSteps	= Math.Max(1, TotalSteps.Value);
 		}
+	}
+
+	protected virtual void InitProgress()
+	{
+		UpdateTotalStepsIfUnset();
 	}
 
 	protected abstract void UpdateProgress(int stepNum, double progress, T? item);

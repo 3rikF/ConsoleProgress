@@ -1,7 +1,10 @@
 ﻿
 // ignore spelling: bg
 
+using System.Runtime.CompilerServices;
 using System.Text;
+
+[assembly: InternalsVisibleTo("ConsoleProgressBarTests")]
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBar;
@@ -10,16 +13,33 @@ namespace ConsoleProgressBar;
 using Console = System.Console;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string? action = null, string? item = null)
-	: ProgressProxy<T>(collection, action, item)
+
+public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 {
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Fields
 
+	private const int DEBUG_CONSOLE_WIDTH = 80;
+
 	private int _topPos;
 	private int _lastProgress = -1;
 
+
 	#endregion Fields
+
+	//-------------------------------------------------------------------------------------------------------------
+	#region Construction
+
+	public ConsoleProgressHandler(IEnumerable<T> collection, string? action = null, string? item = null)
+
+		: base(collection, action, item)
+	{ }
+
+	public ConsoleProgressHandler(T[] collection)
+		: base(collection)
+	{ }
+
+	#endregion Construction
 
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Properties
@@ -45,16 +65,17 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 	private static void NewLine()
 		=> Console.WriteLine();
 
-	private static void ClearConsolLine(int topPos)
+	private void ClearConsolLine(int topPos)
 	{
-		int width = Console.WindowWidth;
-		Console.SetCursorPosition(0, topPos);
+		int width = DebugFlag ? DEBUG_CONSOLE_WIDTH : Console.WindowWidth;
+		if (!DebugFlag)
+			Console.SetCursorPosition(0, topPos);
 		Console.Write(new string(' ', width));
 	}
 
 	private void PrintProgress(int stepNum, double progress)
 	{
-		int consoleWidth = Console.WindowWidth;
+		int consoleWidth = DebugFlag ? DEBUG_CONSOLE_WIDTH : Console.WindowWidth;
 
 		//---------------------------------------------------------------------
 		StringBuilder sbCaption = new ();
@@ -105,7 +126,8 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 		_lastProgress = progressWidth;
 
 		//---------------------------------------------------------------------
-		Console.SetCursorPosition(0, _topPos);
+		if (!DebugFlag)
+			Console.SetCursorPosition(0, _topPos);
 		Console.Write($"{caption}");
 
 		ConsoleColor oldColorFG	= Console.ForegroundColor;
@@ -152,7 +174,7 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 		if (StartAtNewLine)
 			NewLine();
 
-		_topPos = Console.CursorTop;
+		_topPos = DebugFlag ? 0 : Console.CursorTop;
 
 		//--- clear whole console line  ---
 		ClearConsolLine(_topPos);
