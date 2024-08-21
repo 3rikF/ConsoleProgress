@@ -4,7 +4,7 @@
 using System.Text;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace Console.ProgressBar;
+namespace ConsoleProgressBar;
 
 // TODO: Why is this necessary? Why has it to be done *after* the namespace declaration?
 using Console = System.Console;
@@ -67,10 +67,10 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 		}
 
 		//--- left frame ---
-		if (Style.showFrame)
+		if (Style.ShowFrame)
 		{
 			_ =	sbCaption
-				.Append(Style.frameLeft)
+				.Append(Style.FrameLeft)
 				;
 		}
 
@@ -78,7 +78,7 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 		StringBuilder sbEnding = new ();
 
 		//--- right frame ---
-		if (Style.showFrame)
+		if (Style.ShowFrame)
 		{
 			_ = sbEnding
 				.Append(Style.FrameRight)
@@ -99,8 +99,8 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 		double progressWidthF	= barSpace * progress;
 		int progressWidth		= (int)Math.Floor(progressWidthF);
 
-		byte fractionIndex		= (byte)((progressWidthF - progressWidth) * Style.progressCharFractions.Length);
-		bool hasFraction		= Style.showFractions && progressWidth < barSpace && Style.progressCharFractions.Length > 0;
+		byte fractionIndex		= (byte)((progressWidthF - progressWidth) * Style.ProgressCharFractions.Length);
+		bool hasFraction		= Style.ShowFractions && progressWidth < barSpace && Style.ProgressCharFractions.Length > 0;
 
 		_lastProgress = progressWidth;
 
@@ -117,17 +117,17 @@ public sealed class ConsoleProgressHandler<T>(IEnumerable<T> collection, string?
 			Console.BackgroundColor = Colors.Background;
 			Console.ForegroundColor	= Colors.ActiveBar;
 
-			Console.Write(new string(Style.charDone, _lastProgress));
+			Console.Write(new string(Style.CharDone, _lastProgress));
 
 			if (hasFraction)
 			{
 				Console.ForegroundColor	= Colors.FractionBar;
-				Console.Write(Style.progressCharFractions[fractionIndex]);
+				Console.Write(Style.ProgressCharFractions[fractionIndex]);
 			}
 
 			//--- print unfinished part ---
 			Console.ForegroundColor	= Colors.InactiveBar;
-			Console.Write(new string(Style.charEmpty, barSpace -_lastProgress -(hasFraction ? 1 : 0)));
+			Console.Write(new string(Style.CharEmpty, barSpace -_lastProgress -(hasFraction ? 1 : 0)));
 		}
 
 		finally

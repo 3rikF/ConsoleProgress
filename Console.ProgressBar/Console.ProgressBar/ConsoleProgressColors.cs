@@ -1,5 +1,5 @@
 ﻿
-namespace Console.ProgressBar;
+namespace ConsoleProgressBar;
 
 public record ConsoleProgressColors
 {

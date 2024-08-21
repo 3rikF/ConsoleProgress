@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace Console.ProgressBar;
+namespace ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action = null, string? item = null)

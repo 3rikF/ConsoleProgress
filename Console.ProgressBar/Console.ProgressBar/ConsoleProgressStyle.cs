@@ -1,15 +1,15 @@
 ﻿
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace Console.ProgressBar;
+namespace ConsoleProgressBar;
 
 public record ConsoleProgressStyle(
-	bool showFractions
-	, bool showFrame
-	, string frameLeft
+	bool ShowFractions
+	, bool ShowFrame
+	, string FrameLeft
 	, string FrameRight
-	, char charEmpty
-	, char charDone
-	, char[] progressCharFractions
+	, char CharEmpty
+	, char CharDone
+	, char[] ProgressCharFractions
 	)
 {
 	// maybe see: https://github.com/MonoLisaFont/feedback/issues/133

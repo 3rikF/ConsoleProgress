@@ -1,17 +1,17 @@
 ﻿// ignore spelling: bg
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace Console.ProgressBar;
+namespace ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 public static class ConsoleProgressExtensions
 {
-	public static ConsoleProgressHandler<T> WithColors<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleColor color)
+	public static ConsoleProgressHandler<T> WithColor<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleColor activeBar)
 	{
-		consoleProgress.Colors.ActiveBar	= color;
+		consoleProgress.Colors.ActiveBar	= activeBar;
+		consoleProgress.Colors.FractionBar	= activeBar;
 		return consoleProgress;
 	}
-
 	public static ConsoleProgressHandler<T> WithColor<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleColor activeBar, ConsoleColor fractionBar)
 	{
 		consoleProgress.Colors.ActiveBar	= activeBar;
@@ -30,6 +30,12 @@ public static class ConsoleProgressExtensions
 	public static ConsoleProgressHandler<T> WithBgColor<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleColor color)
 	{
 		consoleProgress.Colors.Background	= color;
+		return consoleProgress;
+	}
+
+	public static ConsoleProgressHandler<T> WithColors<T>(this ConsoleProgressHandler<T> consoleProgress, ConsoleProgressColors preset)
+	{
+		consoleProgress.Colors = preset;
 		return consoleProgress;
 	}
 
