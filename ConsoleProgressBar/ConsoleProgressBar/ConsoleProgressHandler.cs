@@ -19,7 +19,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Fields
 
-	private const int DEBUG_CONSOLE_WIDTH = 80;
+	internal const int DEBUG_CONSOLE_WIDTH = 80;
 
 	private int _topPos;
 	private int _lastProgress = -1;

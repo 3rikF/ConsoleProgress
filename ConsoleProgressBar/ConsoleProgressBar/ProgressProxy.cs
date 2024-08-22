@@ -51,9 +51,7 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	}
 
 	protected virtual void InitProgress()
-	{
-		UpdateTotalStepsIfUnset();
-	}
+		=> UpdateTotalStepsIfUnset();
 
 	protected abstract void UpdateProgress(int stepNum, double progress, T? item);
 
@@ -61,6 +59,7 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 	private double GetProgress(int stepNum)
 	{
+#pragma warning disable IDE0046 // In bedingten Ausdruck konvertieren
 		if (TotalSteps is null)
 			return 0D;
 
@@ -69,6 +68,7 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 		else
 			return Math.Max(0D, Math.Min(1D, stepNum / (double)TotalSteps));
+#pragma warning restore IDE0046 // In bedingten Ausdruck konvertieren
 	}
 
 	private bool ShouldCancel(int stepNum)
