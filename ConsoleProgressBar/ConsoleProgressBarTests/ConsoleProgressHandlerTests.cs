@@ -233,37 +233,36 @@ public class ConsoleProgressHandlerTests
 			.ConsoleProgress(EXPECTED_ACTION_TEXT, EXPECTED_ITEM_TEXT)
 			.WithDebugMode();
 
-		using (ConsoleInterceptor ci = new ConsoleInterceptor())
+		using ConsoleInterceptor ci = new();
+
+		//--- Act ---------------------------------------------------------
+		foreach (int _ in sut)
+		{ }
+
+		//--- Assert ------------------------------------------------------
+		//--- split every [sut.DEBUG_CONSOLE_WIDTH] into a new line ---
+		string[] lines = Enumerable
+			.Range(0, ci.Output.Length / LINE_LENGTH)
+			.Select(i => ci.Output.Substring(i * LINE_LENGTH, LINE_LENGTH))
+			.Where(line => !string.IsNullOrWhiteSpace(line))
+			.ToArray();
+
+		Assert.Equal(EXPECTED_LINES, lines.Length);
+
+		//--- each line must contain the action text and a progress-value ---
+		for (int i = 0; i < lines.Length; i++)
 		{
-			//--- Act ---------------------------------------------------------
-			foreach (int item in sut)
-			{ }
+			string line = lines[i];
+			Assert.Contains(EXPECTED_ACTION_TEXT, line);
 
-			//--- Assert ------------------------------------------------------
-			//--- split every [sut.DEBUG_CONSOLE_WIDTH] into a new line ---
-			string[] lines		= Enumerable
-				.Range(0, ci.Output.Length / LINE_LENGTH )
-				.Select(i => ci.Output.Substring(i * LINE_LENGTH, LINE_LENGTH))
-				.Where(line => !string.IsNullOrWhiteSpace(line))
-				.ToArray();
+			// NOT IMPLEMENTED YET
+			//Assert.Contains(TEXT_ITEM, line);
 
-			Assert.Equal(EXPECTED_LINES, lines.Length);
+			// 0/10 -> 1/10 -> ... 10/10
+			Assert.Contains($"{i}/{testData.Length}", line);
 
-			//--- each line must contain the action text and a progress-value ---
-			for (int i = 0; i < lines.Length; i++)
-			{
-				string line = lines[i];
-				Assert.Contains(EXPECTED_ACTION_TEXT, line);
-
-				// NOT IMPLEMENTED YET
-				//Assert.Contains(TEXT_ITEM, line);
-
-				// 0/10 -> 1/10 -> ... 10/10
-				Assert.Contains($"{i}/{testData.Length}", line);
-
-				// 0% -> 10% -> ... 100%
-				Assert.Contains($"{i*10} %", line);
-			}
+			// 0% -> 10% -> ... 100%
+			Assert.Contains($"{i * 10} %", line);
 		}
 	}
 
@@ -271,8 +270,8 @@ public class ConsoleProgressHandlerTests
 	public void MaxBarLength()
 	{
 		//--- Arrange ---------------------------------------------------------
-		const int MAX_BAR_LENGTH = 10;
-		byte[] testData = [42];				//--- one item will result in only two steps: 0% and 100% ---
+		const int MAX_BAR_LENGTH	= 10;
+		byte[] testData				= [42];		//--- one item will result in only two steps: 0% and 100% ---
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
@@ -281,19 +280,18 @@ public class ConsoleProgressHandlerTests
 
 		char barChar = sut.Style.CharDone;
 
-		using (ConsoleInterceptor ci = new ConsoleInterceptor())
-		{
-			//--- Act ---------------------------------------------------------
-			foreach (int item in sut)
-			{ }
+		using ConsoleInterceptor ci = new();
 
-			//--- Assert ------------------------------------------------------
-			//--- somewhere in the console output, there must be a bar with [MAX_BAR_LENGTH] characters ... ---
-			Assert.Contains(new string(barChar, MAX_BAR_LENGTH), ci.Output);
+		//--- Act ---------------------------------------------------------
+		foreach (int _ in sut)
+		{ }
 
-			//... and not a single character more ---
-			Assert.DoesNotContain(new string(barChar, MAX_BAR_LENGTH + 1), ci.Output);
-		}
+		//--- Assert ------------------------------------------------------
+		//--- somewhere in the console output, there must be a bar with [MAX_BAR_LENGTH] characters ... ---
+		Assert.Contains(new string(barChar, MAX_BAR_LENGTH), ci.Output);
+
+		//... and not a single character more ---
+		Assert.DoesNotContain(new string(barChar, MAX_BAR_LENGTH + 1), ci.Output);
 	}
 
 	#endregion Test Methods
