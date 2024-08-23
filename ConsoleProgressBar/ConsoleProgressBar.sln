@@ -5,7 +5,9 @@ VisualStudioVersion = 17.11.35208.52
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleProgressBar", "ConsoleProgressBar\ConsoleProgressBar.csproj", "{026051A5-9A68-42B4-A1C0-3816CC123494}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleProgressBarTests", "ConsoleProgressBarTests\ConsoleProgressBarTests.csproj", "{ACC5DC3B-52FB-4582-A249-6FBE63DCA1B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ConsoleProgressBarTests", "ConsoleProgressBarTests\ConsoleProgressBarTests.csproj", "{ACC5DC3B-52FB-4582-A249-6FBE63DCA1B7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConsoleExample", "ConsoleExample\ConsoleExample.csproj", "{848984E0-EBCB-4806-899F-706EBDA1E0BE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{ACC5DC3B-52FB-4582-A249-6FBE63DCA1B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACC5DC3B-52FB-4582-A249-6FBE63DCA1B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACC5DC3B-52FB-4582-A249-6FBE63DCA1B7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{848984E0-EBCB-4806-899F-706EBDA1E0BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{848984E0-EBCB-4806-899F-706EBDA1E0BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{848984E0-EBCB-4806-899F-706EBDA1E0BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{848984E0-EBCB-4806-899F-706EBDA1E0BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
