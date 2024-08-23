@@ -11,6 +11,40 @@ namespace ConsoleProgressBarTests;
 
 public class ConsoleProgressHandlerTests
 {
+	//-----------------------------------------------------------------------------------------------------------------
+	#region Nested Types
+
+	/// <summary>
+	/// Reroutes the console output to a string writer.
+	/// Resets the standard console output to the original one when disposing.
+	/// </summary>
+	private sealed class ConsoleInterceptor : IDisposable
+	{
+		private readonly StringWriter _sw;
+		private readonly TextWriter _oldOut;
+
+		public ConsoleInterceptor()
+		{
+			_sw		= new StringWriter();
+			_oldOut	= Console.Out;
+			Console.SetOut(_sw);
+		}
+
+		public string Output
+			=> _sw.ToString();
+
+		public void Dispose()
+		{
+			Console.SetOut(_oldOut);
+			_sw.Dispose();
+		}
+	}
+
+	#endregion Nested Types
+
+	//-----------------------------------------------------------------------------------------------------------------
+	#region Test Methods
+
 	/// <summary>
 	/// Test the most basic use case of the progress bar:
 	/// It should pass through the values of the input enumerable.
@@ -187,46 +221,39 @@ public class ConsoleProgressHandlerTests
 	public void TextFormatting()
 	{
 		//--- Arrange ---------------------------------------------------------
-		const string TEXT_ACTION	= "Action Text";
-		const string TEXT_ITEM		= "Step Text";
+		const string EXPECTED_ACTION_TEXT	= "Action Text";
+		const string EXPECTED_ITEM_TEXT		= "Step Text";
+		const int EXPECTED_LINES			= 11;
 
-		byte[] testData = new byte[10];
+		const int LINE_LENGTH	= ConsoleProgressHandler<byte>.DEBUG_CONSOLE_WIDTH;
+		byte[] testData			= new byte[EXPECTED_LINES-1];
 		new Random(08_15).NextBytes(testData);
 
-		ConsoleProgressHandler<byte>? sut = testData
-			.ConsoleProgress(TEXT_ACTION, TEXT_ITEM)
-			.WithDebugMode() as ConsoleProgressHandler<byte>;
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress(EXPECTED_ACTION_TEXT, EXPECTED_ITEM_TEXT)
+			.WithDebugMode();
 
-
-		//--- intercept console output ---
-		string consoleOutput;
-		using StringWriter sw = new();
-		TextWriter oldOut = Console.Out;
-		Console.SetOut(sw);
-
-		try
+		using (ConsoleInterceptor ci = new ConsoleInterceptor())
 		{
 			//--- Act ---------------------------------------------------------
 			foreach (int item in sut)
 			{ }
 
-			consoleOutput	= sw.ToString();
-
+			//--- Assert ------------------------------------------------------
 			//--- split every [sut.DEBUG_CONSOLE_WIDTH] into a new line ---
-			const int LINE_LENGTH = ConsoleProgressHandler<byte>.DEBUG_CONSOLE_WIDTH;
 			string[] lines		= Enumerable
-				.Range(0, consoleOutput.Length / LINE_LENGTH )
-				.Select(i => consoleOutput.Substring(i * LINE_LENGTH, LINE_LENGTH))
+				.Range(0, ci.Output.Length / LINE_LENGTH )
+				.Select(i => ci.Output.Substring(i * LINE_LENGTH, LINE_LENGTH))
 				.Where(line => !string.IsNullOrWhiteSpace(line))
 				.ToArray();
 
-			//--- Assert ------------------------------------------------------
+			Assert.Equal(EXPECTED_LINES, lines.Length);
 
 			//--- each line must contain the action text and a progress-value ---
 			for (int i = 0; i < lines.Length; i++)
 			{
 				string line = lines[i];
-				Assert.Contains(TEXT_ACTION, line);
+				Assert.Contains(EXPECTED_ACTION_TEXT, line);
 
 				// NOT IMPLEMENTED YET
 				//Assert.Contains(TEXT_ITEM, line);
@@ -238,12 +265,39 @@ public class ConsoleProgressHandlerTests
 				Assert.Contains($"{i*10} %", line);
 			}
 		}
-		finally
+	}
+
+	[Fact]
+	public void MaxBarLength()
+	{
+		//--- Arrange ---------------------------------------------------------
+		const int MAX_BAR_LENGTH = 10;
+		byte[] testData = [42];				//--- one item will result in only two steps: 0% and 100% ---
+
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithMaxBarLength(MAX_BAR_LENGTH)
+			.WithDebugMode();
+
+		char barChar = sut.Style.CharDone;
+
+		using (ConsoleInterceptor ci = new ConsoleInterceptor())
 		{
-			//--- reset console output or the other tests will fail ---
-			Console.SetOut(oldOut);
+			//--- Act ---------------------------------------------------------
+			foreach (int item in sut)
+			{ }
+
+			//--- Assert ------------------------------------------------------
+			//--- somewhere in the console output, there must be a bar with [MAX_BAR_LENGTH] characters ... ---
+			Assert.Contains(new string(barChar, MAX_BAR_LENGTH), ci.Output);
+
+			//... and not a single character more ---
+			Assert.DoesNotContain(new string(barChar, MAX_BAR_LENGTH + 1), ci.Output);
 		}
 	}
+
+	#endregion Test Methods
 }
+
 
 #pragma warning restore CCD0001 // IOSP violation

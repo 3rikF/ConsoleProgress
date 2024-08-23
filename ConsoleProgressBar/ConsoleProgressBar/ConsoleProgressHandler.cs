@@ -24,7 +24,6 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 	private int _topPos;
 	private int _lastProgress = -1;
 
-
 	#endregion Fields
 
 	//-------------------------------------------------------------------------------------------------------------
@@ -47,8 +46,8 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 	public bool StartAtNewLine
 		{ get; internal set; } = false;
 
-	public int? PreCountElements
-		{ get; internal set; } = null;
+	public int MaxBarLength
+		{ get; internal set; } = -1;
 
 	public ConsoleProgressStyle Style
 		{ get; internal set; } = ConsoleProgressStyle.Default;
@@ -116,12 +115,16 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 		string ending	= sbEnding.ToString();
 		int barSpace	= consoleWidth -caption.Length -ending.Length;
 
+		if (MaxBarLength > 0)
+			barSpace = int.Min(MaxBarLength, barSpace);
+
 		//---------------------------------------------------------------------
 		double progressWidthF	= barSpace * progress;
 		int progressWidth		= (int)Math.Floor(progressWidthF);
 
 		byte fractionIndex		= (byte)((progressWidthF - progressWidth) * Style.ProgressCharFractions.Length);
 		bool hasFraction		= Style.ShowFractions && progressWidth < barSpace && Style.ProgressCharFractions.Length > 0;
+
 
 		_lastProgress = progressWidth;
 

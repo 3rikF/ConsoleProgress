@@ -67,7 +67,7 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 			return 1D;
 
 		else
-			return Math.Max(0D, Math.Min(1D, stepNum / (double)TotalSteps));
+			return double.Clamp(stepNum / (double)TotalSteps, 0.0, 1.0);
 #pragma warning restore IDE0046 // In bedingten Ausdruck konvertieren
 	}
 
