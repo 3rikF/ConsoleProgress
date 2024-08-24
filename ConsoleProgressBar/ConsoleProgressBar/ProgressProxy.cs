@@ -71,8 +71,27 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 #pragma warning restore IDE0046 // In bedingten Ausdruck konvertieren
 	}
 
-	private bool ShouldCancel(int stepNum)
-		=> CancelAfter.HasValue && stepNum >= CancelAfter;
+	/// <summary>
+	/// If <see cref="CancelAfter"/> is set, the enumeration will be limited to this number of items.
+	/// There is a special logic in place to handle (EntityFramework) queries.
+	/// </summary>
+	/// <returns>New enumerable with the actual number of items to iterate over</returns>
+	private IEnumerable<T> GetActualEnumeration()
+	{
+		if (CancelAfter.HasValue)
+		{
+			//--- this is important when the enumerable is a EntityFramework query ---
+			//--- otherwise the query will be executed completely even if the foreach loop is canceled ---
+			IEnumerable<T> tmp = _collection
+				.AsQueryable()
+				.Take(CancelAfter.Value);
+
+			//--- fall-back if something goes wrong with the query-able ---
+			return tmp ?? _collection.Take(CancelAfter.Value);
+		}
+
+		return _collection;
+	}
 
 	#endregion Methods
 
@@ -84,20 +103,18 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 		InitProgress();
 		int stepNum = 0;
 
-		foreach (T item in _collection)
+
+		foreach (T item in GetActualEnumeration())
 		{
 			//--- pass-through the item ---
 			yield return item;
 
 			//--- report progress ---
 			UpdateProgress(++stepNum, GetProgress(stepNum), item);
-
-			//--- premature canceling the iteration (see extension .CancelAfter(), mainly for debugging purposes) ---
-			if (ShouldCancel(stepNum))
-				break;
 		}
 
 		FinishProgress();
+		yield break;
 	}
 
 	IEnumerator IEnumerable.GetEnumerator()
