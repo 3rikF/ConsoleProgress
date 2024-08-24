@@ -51,20 +51,23 @@ public record ConsoleProgressColors
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Presets
 
-	public static ConsoleProgressColors Default			=> Cyan;
-	public static ConsoleProgressColors Blue			=> new (ConsoleColor.Blue, ConsoleColor.Cyan);
-	public static ConsoleProgressColors Green			=> new (ConsoleColor.DarkGreen, ConsoleColor.Green);
-	public static ConsoleProgressColors Red				=> new (ConsoleColor.Red, ConsoleColor.Yellow);
-	public static ConsoleProgressColors Yellow			=> new (ConsoleColor.Yellow, ConsoleColor.White);
-	public static ConsoleProgressColors Cyan			=> new (ConsoleColor.DarkCyan, ConsoleColor.Cyan);
-	public static ConsoleProgressColors Magenta			=> new (ConsoleColor.Magenta, ConsoleColor.Magenta);
-	public static ConsoleProgressColors White			=> new (ConsoleColor.White, ConsoleColor.White);
-	public static ConsoleProgressColors Gray			=> new (ConsoleColor.Gray, ConsoleColor.White);
+	public static ConsoleProgressColors Default	=> Cyan;
+	public static ConsoleProgressColors Blue	=> new (ConsoleColor.Blue, ConsoleColor.Cyan){ Name = nameof(Blue) };
+	public static ConsoleProgressColors Green	=> new (ConsoleColor.DarkGreen, ConsoleColor.Green){ Name = nameof(Green) };
+	public static ConsoleProgressColors Red		=> new (ConsoleColor.Red, ConsoleColor.Yellow){ Name = nameof(Red) };
+	public static ConsoleProgressColors Yellow	=> new (ConsoleColor.Yellow, ConsoleColor.White){ Name = nameof(Yellow) };
+	public static ConsoleProgressColors Cyan	=> new (ConsoleColor.DarkCyan, ConsoleColor.Cyan){ Name = nameof(Cyan) };
+	public static ConsoleProgressColors Magenta	=> new (ConsoleColor.Magenta, ConsoleColor.Magenta){ Name = nameof(Magenta) };
+	public static ConsoleProgressColors White	=> new (ConsoleColor.White, ConsoleColor.White){ Name = nameof(White) };
+	public static ConsoleProgressColors Gray	=> new (ConsoleColor.Gray, ConsoleColor.White){ Name = nameof(Gray) };
 
 	#endregion Presets
 
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Properties
+
+	public string Name
+		{ get; set; } = string.Empty;
 
 	public ConsoleColor Background
 		{ get; set; }
