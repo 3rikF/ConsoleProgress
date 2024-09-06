@@ -80,15 +80,14 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v2
 
-        # Build the application to populate the obj folder with RuntimeIdentifiers
-        - name: Build the application
+      # Execute all unit tests in the solution
+      - name: Execute unit tests
+        run: dotnet test
+
+      # Build the application to populate the obj folder with RuntimeIdentifiers
+      - name: Build the application
         #run: dir
         # dir shows, we are in "D:\a\ConsoleProgress\ConsoleProgress" with the next sub folder beeing "ConsoleProgressBar"
         run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
         env:
           Configuration: ${{ matrix.configuration }}
-
-        # Execute all unit tests in the solution
-        - name: Execute unit tests
-          run: dotnet test
-  
