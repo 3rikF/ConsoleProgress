@@ -60,7 +60,7 @@ jobs:
       Solution_Name: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBar.sln
 
       # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-      Test_Project_Path: ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj
+      Test_Project_Path: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj
       #Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       #Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
 
