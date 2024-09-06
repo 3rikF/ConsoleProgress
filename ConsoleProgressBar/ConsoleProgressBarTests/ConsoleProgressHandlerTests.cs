@@ -228,7 +228,7 @@ public class ConsoleProgressHandlerTests
 		const int EXPECTED_LINES			= 11;
 
 		const int LINE_LENGTH	= ConsoleProgressHandler<byte>.DEBUG_CONSOLE_WIDTH;
-		byte[] testData			= new byte[MAX_BAR_LENGTH];
+		byte[] testData			= new byte[NUM_ITEMS];
 		new Random(08_15).NextBytes(testData);
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
