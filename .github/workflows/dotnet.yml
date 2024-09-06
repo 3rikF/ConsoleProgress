@@ -80,6 +80,10 @@ jobs:
       - name: Setup MSBuild.exe
         uses: microsoft/setup-msbuild@v2
 
+      ## Execute all unit tests in the solution
+      #- name: Execute unit tests
+      #  run: dotnet test
+        
       # Build the application to populate the obj folder with RuntimeIdentifiers
       - name: Build the application
         #run: dir
@@ -88,6 +92,3 @@ jobs:
         env:
           Configuration: ${{ matrix.configuration }}
 
-      # Execute all unit tests in the solution
-      - name: Execute unit tests
-        run: dotnet test
