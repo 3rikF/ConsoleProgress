@@ -22,8 +22,7 @@ jobs:
         dotnet-version: 8.0.x
     - name: Restore dependencies
       run: dotnet restore
-      working-directory: /home/runner/work/ConsoleProgress/ConsoleProgress/ConsoleProgressBar/ConsoleProgressBar/
     - name: Build
-      run: dotnet build ConsoleProgressBar.sln --no-restore
+      run: dotnet build ./ConsoleProgressBar/ConsoleProgressBar.sln --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
