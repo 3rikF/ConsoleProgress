@@ -82,7 +82,8 @@ jobs:
 
       # Execute all unit tests in the solution
       - name: Execute unit tests
-        working-directory: $env:Test_Project_Path
+        working-directory: ConsoleProgressBarTests
+        #$env:Test_Project_Path
         #run: dir
         run: dotnet test
 
