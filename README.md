@@ -1,5 +1,9 @@
 # Console Progress Bar
 
+## Current Status
+
+![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-desktop.yml/badge.svg)
+
 ## Table of Contents
 - [Console Progress Bar](#console-progress-bar)
 	- [Table of Contents](#table-of-contents)
