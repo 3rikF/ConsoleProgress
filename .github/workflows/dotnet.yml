@@ -82,8 +82,9 @@ jobs:
 
       # Execute all unit tests in the solution
       - name: Execute unit tests
-        run: dir
-        #run: dotnet test
+        working-directory: $env:Test_Project_Path
+        #run: dir
+        run: dotnet test
 
       # Build the application to populate the obj folder with RuntimeIdentifiers
       - name: Build the application
