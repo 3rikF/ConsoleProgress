@@ -24,6 +24,6 @@ jobs:
       run: dotnet restore
       working-directory: /home/runner/work/ConsoleProgress/ConsoleProgress/ConsoleProgressBar/ConsoleProgressBar/
     - name: Build
-      run: dotnet build --no-restore
+      run: dotnet build ConsoleProgressBar.sln --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
