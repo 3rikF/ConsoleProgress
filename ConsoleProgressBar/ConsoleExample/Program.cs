@@ -1,8 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ConsoleExample.Examples;
 
-Console.OutputEncoding = System.Text.Encoding.UTF8;
-
 Header header = new ();
 ExampleBase[] examples =
 [
