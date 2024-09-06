@@ -25,6 +25,5 @@ jobs:
     - name: Build
       working-directory: /home/runner/work/ConsoleProgress/ConsoleProgress/ConsoleProgressBar/
       run: dotnet build /home/runner/work/ConsoleProgress/ConsoleProgress/ConsoleProgressBar/ConsoleProgressBar.sln --no-restore
-      run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
