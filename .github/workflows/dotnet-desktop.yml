@@ -83,7 +83,7 @@ jobs:
     - name: Execute unit tests
       # a simple "dotnet test" does not work, regardless of how/what  path is set - only directly per parameter works
       # maybe the same problem as hiere https://github.com/dotnet/sdk/issues/28983
-      run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj"
+      run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj" --collect:"XPlat Code Coverage"
 
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
