@@ -56,6 +56,9 @@ jobs:
                              # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
 
     env:
+      # set consol column widht so the [TextFormatting] test might not fail (left to be seen)
+      COLUMNS: 120    
+      
       # Replace with your solution name, i.e. MyWpfApp.sln.
       Solution_Name: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBar.sln
       
