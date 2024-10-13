@@ -90,6 +90,9 @@ jobs:
       uses: codecov/codecov-action@v4
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        files: ./coverage/**/*.xml
+        flags: unittests
+    #    name: codecov-umbrella
         
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
