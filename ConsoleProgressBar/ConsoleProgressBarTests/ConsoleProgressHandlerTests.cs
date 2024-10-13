@@ -1,15 +1,18 @@
 ﻿
 // ignore spelling: moq
 
+using System.Diagnostics.CodeAnalysis;
+
 using ConsoleProgressBar;
 
 using Moq;
 
+using Xunit.Abstractions;
+
 namespace ConsoleProgressBarTests;
 
-#pragma warning disable CCD0001 // IOSP violation
-
-public class ConsoleProgressHandlerTests
+[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
+public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 {
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Nested Types
@@ -42,6 +45,14 @@ public class ConsoleProgressHandlerTests
 
 	#endregion Nested Types
 
+	//-------------------------------------------------------------------------------------------------------------
+	#region Properties
+
+	private ITestOutputHelper TestConsole
+		=> toh;
+
+	#endregion Properties
+
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Test Methods
 
@@ -65,6 +76,8 @@ public class ConsoleProgressHandlerTests
 
 		foreach (int item in sut)
 			Assert.Equal(testData[iTestData++], item);
+
+		TestConsole.WriteLine("[OK ✔️] All enumeration items have been passed through the iteration proxy.");
 	}
 
 	/// <summary>
@@ -107,6 +120,9 @@ public class ConsoleProgressHandlerTests
 
 		//--- Assert ----------------------------------------------------------
 		mockEnumerable.VerifyAll();
+
+		TestConsole.WriteLine("[OK ✔️] The Enumerator was only called once on the enumeration");
+		TestConsole.WriteLine("[OK ✔️] [Count] was never called on the original enumeration");
 	}
 
 	/// <summary>
@@ -159,6 +175,8 @@ public class ConsoleProgressHandlerTests
 		//--- assert that the enumerator was called exactly [MAX_ITERATIONS] times ---
 		// this in turn asserts, that the iterator was "canceled" after [MAX_ITERATIONS] iterations
 		mockEnumerable.VerifyAll();
+
+		TestConsole.WriteLine("[OK ✔️] After canceling the enumeration, no further item was processed.");
 	}
 
 	/// <summary>
@@ -211,6 +229,10 @@ public class ConsoleProgressHandlerTests
 		//--- assert that the enumerator was called exactly [MAX_ITERATIONS] times ---
 		// this in turn asserts, that the iterator was "canceled" after [MAX_ITERATIONS] iterations
 		mockEnumerable.VerifyAll();
+
+		TestConsole.WriteLine("[OK ✔️] The Enumerator was only called once on the enumeration");
+		TestConsole.WriteLine("[OK ✔️] [Count] was never called on the original enumeration");
+		TestConsole.WriteLine("[OK ✔️] After canceling the enumeration, no further item was processed.");
 	}
 
 	/// <summary>
@@ -299,6 +321,3 @@ public class ConsoleProgressHandlerTests
 
 	#endregion Test Methods
 }
-
-
-#pragma warning restore CCD0001 // IOSP violation
