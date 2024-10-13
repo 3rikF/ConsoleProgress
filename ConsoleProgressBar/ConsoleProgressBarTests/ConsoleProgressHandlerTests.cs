@@ -1,7 +1,5 @@
 ﻿
-// ignore spelling: moq
-
-using System.Diagnostics.CodeAnalysis;
+// ignore spelling: moq bg
 
 using ConsoleProgressBar;
 
@@ -11,7 +9,7 @@ using Xunit.Abstractions;
 
 namespace ConsoleProgressBarTests;
 
-[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
+//[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
 public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 {
 	//-----------------------------------------------------------------------------------------------------------------
@@ -56,6 +54,13 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Test Methods
 
+	private static byte[] GetRandomBytes(int length)
+	{
+		byte[] testData = new byte[length];
+		new Random(08_15).NextBytes(testData);
+		return testData;
+	}
+
 	/// <summary>
 	/// Test the most basic use case of the progress bar:
 	/// It should pass through the values of the input enumerable.
@@ -64,8 +69,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	public void IteratorProxy()
 	{
 		//--- Arrange ---------------------------------------------------------
-		byte[] testData = new byte[1000];
-		new Random(08_15).NextBytes(testData);
+		byte[] testData = GetRandomBytes(1000);
 
 		ProgressProxy<byte> sut = testData
 			.ConsoleProgress()
@@ -89,10 +93,8 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	public void PreCountSetDoesNotCallCount()
 	{
 		//--- Arrange ---------------------------------------------------------
-		const int PRECOUNT = 5;
-
-		byte[] testData = new byte[1000];
-		new Random(08_15).NextBytes(testData);
+		const int PRECOUNT	= 5;
+		byte[] testData		= GetRandomBytes(1000);
 
 		Mock<ICollection<byte>> mockEnumerable = new ();
 
@@ -134,10 +136,8 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	public void CancelAfterCancels()
 	{
 		//--- Arrange ---------------------------------------------------------
-		const int MAX_ITERATIONS = 5;
-
-		byte[] testData = new byte[1000];
-		new Random(08_15).NextBytes(testData);
+		const int MAX_ITERATIONS	= 5;
+		byte[] testData				= GetRandomBytes(1000);
 
 		Mock<ICollection<byte>> mockEnumerable = new ();
 		Mock<IEnumerator<byte>> mockEnumerator = new ();
@@ -186,11 +186,9 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	public void CancelAfterCancelsWithPreCount()
 	{
 		//--- Arrange ---------------------------------------------------------
-		const int MAX_ITERATIONS = 5;
-		const int PRECOUNT = 10;
-
-		byte[] testData = new byte[1000];
-		new Random(08_15).NextBytes(testData);
+		const int MAX_ITERATIONS	= 5;
+		const int PRECOUNT			= 10;
+		byte[] testData				= GetRandomBytes(1000);
 
 		Mock<ICollection<byte>> mockEnumerable = new ();
 		Mock<IEnumerator<byte>> mockEnumerator = new ();
@@ -236,26 +234,24 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	}
 
 	/// <summary>
-	/// Test the most basic use case of the progress bar:
-	/// It should pass through the values of the input enumerable.
+	/// Tests, if the current text-formatting of the progress bar is as expected.
+	/// Checks all expected updates of the progress bar.
+	/// Without proper cursor positioning during the test run, this will results in multiples lines of output.
 	/// </summary>
-	[Fact(Skip = "GitHub CI pipeline test fail due to some console length limitation or so")]
+	[Fact]
 	public void TextFormatting()
 	{
 		//--- Arrange ---------------------------------------------------------
 		const string EXPECTED_ACTION_TEXT	= "Action Text";
 		const string EXPECTED_ITEM_TEXT		= "Step Text";
-		const int MAX_BAR_LENGTH			= 10;
-		const int NUM_ITEMS					= MAX_BAR_LENGTH;
-		const int EXPECTED_LINES			= 11;
+		const int NUM_ITEMS					= 10;
+		const int EXPECTED_LINES			= NUM_ITEMS +1;
 
-		const int LINE_LENGTH	= ConsoleProgressHandler<byte>.DEBUG_CONSOLE_WIDTH;
-		byte[] testData			= new byte[NUM_ITEMS];
-		new Random(08_15).NextBytes(testData);
+		byte[] testData						= GetRandomBytes(NUM_ITEMS);
+
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress(EXPECTED_ACTION_TEXT, EXPECTED_ITEM_TEXT)
-			//.WithMaxBarLength(MAX_BAR_LENGTH)
 			.WithDebugMode();
 
 		using ConsoleInterceptor ci = new();
@@ -265,11 +261,11 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		{ }
 
 		//--- Assert ------------------------------------------------------
-		//--- split every [sut.DEBUG_CONSOLE_WIDTH] into a new line ---
-		string[] lines = Enumerable
-			.Range(0, ci.Output.Length / LINE_LENGTH)
-			.Select(i => ci.Output.Substring(i * LINE_LENGTH, LINE_LENGTH))
+		string[] lines =
+			ci.Output
+			.Split("%]")
 			.Where(line => !string.IsNullOrWhiteSpace(line))
+			.Select(line => line.Trim()+"%]")
 			.ToArray();
 
 		Assert.Equal(EXPECTED_LINES, lines.Length);
@@ -287,10 +283,17 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 			Assert.Contains($"{i}/{testData.Length}", line);
 
 			// 0% -> 10% -> ... 100%
-			Assert.Contains($"{i * 10} %", line);
+			Assert.Contains($"{i * 10}%", line);
+
+			TestConsole.WriteLine($"[OK ✔️] The text formatting of line [{i+1}/{EXPECTED_LINES}] is as expected.");
 		}
+
+		TestConsole.WriteLine($"[OK ✔️] The text formatting of all lines is as expected.");
 	}
 
+	/// <summary>
+	/// Tests, if the maximum bar length setting is respected.
+	/// </summary>
 	[Fact]
 	public void MaxBarLength()
 	{
@@ -317,6 +320,233 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		//... and not a single character more ---
 		Assert.DoesNotContain(new string(barChar, MAX_BAR_LENGTH + 1), ci.Output);
+	}
+
+	[Fact]
+	public void FluentApi_DefaultColors()
+	{
+		//--- Arrange ---------------------------------------------------------
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithDebugMode();
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(ConsoleProgressColors.Default.ActiveBar,	sut.Colors.ActiveBar);
+		Assert.Equal(ConsoleProgressColors.Default.FractionBar,	sut.Colors.FractionBar);
+		Assert.Equal(ConsoleProgressColors.Default.InactiveBar,	sut.Colors.InactiveBar);
+		Assert.Equal(ConsoleProgressColors.Default.Background,	sut.Colors.Background);
+	}
+
+	[Fact]
+	public void FluentApi_WithColor_A()
+	{
+		//--- Arrange ---------------------------------------------------------
+		const ConsoleColor ACTIVE_BAR_COLOR		= ConsoleColor.Red;
+
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithColor(ACTIVE_BAR_COLOR)
+			.WithDebugMode();
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.ActiveBar);
+		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.FractionBar);
+
+		Assert.Equal(ConsoleProgressColors.Default.InactiveBar,	sut.Colors.InactiveBar);
+		Assert.Equal(ConsoleProgressColors.Default.Background,	sut.Colors.Background);
+	}
+
+	[Fact]
+	public void FluentApi_WithColor_B()
+	{
+		//--- Arrange ---------------------------------------------------------
+		const ConsoleColor ACTIVE_BAR_COLOR		= ConsoleColor.Red;
+		const ConsoleColor FRACTION_BAR_COLOR	= ConsoleColor.Green;
+
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR)
+			.WithDebugMode();
+
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.ActiveBar);
+		Assert.Equal(FRACTION_BAR_COLOR, sut.Colors.FractionBar);
+
+		Assert.Equal(ConsoleProgressColors.Default.InactiveBar,	sut.Colors.InactiveBar);
+		Assert.Equal(ConsoleProgressColors.Default.Background,	sut.Colors.Background);
+	}
+
+	[Fact]
+	public void FluentApi_WithColor_C()
+	{
+		//--- Arrange ---------------------------------------------------------
+		const ConsoleColor ACTIVE_BAR_COLOR		= ConsoleColor.Red;
+		const ConsoleColor FRACTION_BAR_COLOR	= ConsoleColor.Green;
+		const ConsoleColor INACTIVE_BAR_COLOR	= ConsoleColor.Blue;
+
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR, INACTIVE_BAR_COLOR)
+			.WithDebugMode();
+
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(ACTIVE_BAR_COLOR,		sut.Colors.ActiveBar);
+		Assert.Equal(FRACTION_BAR_COLOR,	sut.Colors.FractionBar);
+		Assert.Equal(INACTIVE_BAR_COLOR,	sut.Colors.InactiveBar);
+
+		Assert.Equal(ConsoleProgressColors.Default.Background,	sut.Colors.Background);
+	}
+
+	[Fact]
+	public void FluentApi_WithBgColor()
+	{
+		//--- Arrange ---------------------------------------------------------
+		const ConsoleColor BACKGROUND_BAR_COLOR	= ConsoleColor.Green;
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithBgColor(BACKGROUND_BAR_COLOR)
+			.WithDebugMode();
+
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(ConsoleProgressColors.Default.ActiveBar,	sut.Colors.ActiveBar);
+		Assert.Equal(ConsoleProgressColors.Default.FractionBar,	sut.Colors.FractionBar);
+		Assert.Equal(ConsoleProgressColors.Default.InactiveBar,	sut.Colors.InactiveBar);
+
+		Assert.Equal(BACKGROUND_BAR_COLOR,	sut.Colors.Background);
+	}
+
+	public static TheoryData<ConsoleProgressColors> ColorPresets
+		=> new()
+		{
+			ConsoleProgressColors.Default,
+			ConsoleProgressColors.Blue,
+			ConsoleProgressColors.Green,
+			ConsoleProgressColors.Red,
+			ConsoleProgressColors.Yellow,
+			ConsoleProgressColors.Cyan,
+			ConsoleProgressColors.Magenta,
+			ConsoleProgressColors.White,
+			ConsoleProgressColors.Gray
+		};
+
+	/// <summary>
+	/// Of course this is silly: if it works for one, it works for all.
+	/// But it increases the test coverage due to those color-presets being "touched" by a test.
+	/// </summary>
+	/// <param name="expectedColors"></param>
+	[Theory]
+	[MemberData(nameof(ColorPresets))]
+	public void FluentApi_WithColorS(ConsoleProgressColors expectedColors)
+	{
+		//--- Arrange ---------------------------------------------------------
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithColors(expectedColors)
+			.WithDebugMode();
+
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(expectedColors.ActiveBar,		sut.Colors.ActiveBar);
+		Assert.Equal(expectedColors.FractionBar,	sut.Colors.FractionBar);
+		Assert.Equal(expectedColors.InactiveBar,	sut.Colors.InactiveBar);
+		Assert.Equal(expectedColors.Background,		sut.Colors.Background);
+	}
+
+	[Fact]
+	public void FluentApi_WithStyle()
+	{
+		//--- Arrange ---------------------------------------------------------
+		ConsoleProgressStyle EXPECTED_STYLE	= new ConsoleProgressStyle(true, false, "FL", "FR", 'X', 'Y', ['1','2','3'], "TESTNAME");
+
+		byte[] testData = GetRandomBytes(10);
+
+		//--- Act ---------------------------------------------------------
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithStyle(EXPECTED_STYLE)
+			.WithDebugMode();
+
+
+		//--- Assert ------------------------------------------------------
+		Assert.Equal(EXPECTED_STYLE.ShowFrame,				sut.Style.ShowFrame);
+		Assert.Equal(EXPECTED_STYLE.ShowFractions,			sut.Style.ShowFractions);
+
+		Assert.Equal(EXPECTED_STYLE.FrameLeft,				sut.Style.FrameLeft);
+		Assert.Equal(EXPECTED_STYLE.FrameRight,				sut.Style.FrameRight);
+
+		Assert.Equal(EXPECTED_STYLE.CharDone,				sut.Style.CharDone);
+		Assert.Equal(EXPECTED_STYLE.CharEmpty,				sut.Style.CharEmpty);
+		Assert.Equal(EXPECTED_STYLE.ProgressCharFractions,	sut.Style.ProgressCharFractions);
+	}
+
+	/// <summary>
+	/// With <see cref="WithNewLine"/> sett to <c>true</c>, the progress bar should start on a new line.
+	/// </summary>
+	[Fact]
+	public void FluentApi_WithNewLine_Confirm()
+	{
+		//--- Arrange ---------------------------------------------------------
+		//--- one item will result in only two steps: 0% and 100% ---
+		byte[] testData = GetRandomBytes(1);
+
+		//--- Act ---------------------------------------------------------
+		using ConsoleInterceptor ci = new();
+
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithNewLine()
+			.WithDebugMode();
+
+		foreach (int _ in sut)
+		{ }
+
+		//--- Assert ------------------------------------------------------
+		Assert.StartsWith(Environment.NewLine, ci.Output);
+	}
+
+	/// <summary>
+	/// Likewise, with <see cref="WithNewLine"/> sett to <c>false</c>, the progress bar should not start on a new line.
+	/// </summary>
+	[Fact]
+	public void FluentApi_WithNewLine_Falsify()
+	{
+		//--- Arrange ---------------------------------------------------------
+		//--- one item will result in only two steps: 0% and 100% ---
+		byte[] testData = GetRandomBytes(1);
+
+		//--- Act ---------------------------------------------------------
+		using ConsoleInterceptor ci = new();
+
+		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
+			.ConsoleProgress()
+			.WithDebugMode();
+
+		foreach (int _ in sut)
+		{ }
+
+		//--- Assert ------------------------------------------------------
+		Assert.True(!ci.Output.StartsWith(Environment.NewLine));
 	}
 
 	#endregion Test Methods
