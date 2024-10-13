@@ -3,6 +3,7 @@
 ## Current Status
 
 ![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-desktop.yml/badge.svg)
+[![codecov](https://codecov.io/gh/3rikF/ConsoleProgress/graph/badge.svg?token=6DBLGNQC73)](https://codecov.io/gh/3rikF/ConsoleProgress)
 
 ## Table of Contents
 - [Console Progress Bar](#console-progress-bar)
