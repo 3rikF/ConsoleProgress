@@ -83,8 +83,14 @@ jobs:
     - name: Execute unit tests
       # a simple "dotnet test" does not work, regardless of how/what  path is set - only directly per parameter works
       # maybe the same problem as hiere https://github.com/dotnet/sdk/issues/28983
-      run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj" --collect:"XPlat Code Coverage"
+      run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj" --collect:"XPlat Code Coverage;Format=json,cobertura"
 
+    # taken from a Codecov example
+    - name: Upload results to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
       run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
