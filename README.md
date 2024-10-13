@@ -2,8 +2,9 @@
 
 ## Current Status
 
-![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-desktop.yml/badge.svg)
-[![codecov](https://codecov.io/gh/3rikF/ConsoleProgress/graph/badge.svg?token=6DBLGNQC73)](https://codecov.io/gh/3rikF/ConsoleProgress)
+[![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/3rikF/ConsoleProgress/actions) 
+[![Codecov Test Coverage](https://codecov.io/gh/3rikF/ConsoleProgress/graph/badge.svg?token=6DBLGNQC73)](https://codecov.io/gh/3rikF/ConsoleProgress) 
+[![WakaTime Tracking](https://wakatime.com/badge/user/ccce5eac-49f0-481f-998c-1183a3cd0b18/project/22dc24f9-97a1-4b21-a674-e2b3a8c44b91.svg?Style=flat)](https://wakatime.com/badge/user/ccce5eac-49f0-481f-998c-1183a3cd0b18/project/22dc24f9-97a1-4b21-a674-e2b3a8c44b91)
 
 ## Table of Contents
 - [Console Progress Bar](#console-progress-bar)
