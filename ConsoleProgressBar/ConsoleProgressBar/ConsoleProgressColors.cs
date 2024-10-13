@@ -66,7 +66,7 @@ public record ConsoleProgressColors
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Properties
 
-	public string Name
+	public required string Name
 		{ get; set; } = string.Empty;
 
 	public ConsoleColor Background
