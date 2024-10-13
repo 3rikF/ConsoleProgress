@@ -1,6 +1,8 @@
 ﻿
 // ignore spelling: moq bg
 
+using System.Diagnostics.CodeAnalysis;
+
 using ConsoleProgressBar;
 
 using Moq;
@@ -433,6 +435,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		Assert.Equal(BACKGROUND_BAR_COLOR,	sut.Colors.Background);
 	}
 
+	[SuppressMessage("Style", "IDE0028:Initialisierung der Sammlung vereinfachen", Justification = "... no it cannot")]
 	public static TheoryData<ConsoleProgressColors> ColorPresets
 		=> new()
 		{
@@ -477,7 +480,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 	public void FluentApi_WithStyle()
 	{
 		//--- Arrange ---------------------------------------------------------
-		ConsoleProgressStyle EXPECTED_STYLE	= new ConsoleProgressStyle(true, false, "FL", "FR", 'X', 'Y', ['1','2','3'], "TESTNAME");
+		ConsoleProgressStyle EXPECTED_STYLE	= new (true, false, "FL", "FR", 'X', 'Y', ['1','2','3'], "TESTNAME");
 
 		byte[] testData = GetRandomBytes(10);
 

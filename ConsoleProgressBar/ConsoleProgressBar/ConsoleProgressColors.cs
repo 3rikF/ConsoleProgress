@@ -1,4 +1,7 @@
-﻿
+﻿using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("ConsoleProgressBarTests")]
+
 namespace ConsoleProgressBar;
 
 public record ConsoleProgressColors
@@ -6,8 +9,8 @@ public record ConsoleProgressColors
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Fields
 
-	private const ConsoleColor DEFAULT_COLOR_INACTIVE_BAR	= ConsoleColor.DarkGray;
-	private const ConsoleColor DEFAULT_COLOR_BACKGROUND		= ConsoleColor.Black;
+	internal const ConsoleColor DEFAULT_COLOR_INACTIVE_BAR	= ConsoleColor.DarkGray;
+	internal const ConsoleColor DEFAULT_COLOR_BACKGROUND	= ConsoleColor.Black;
 
 	#endregion Fields
 
