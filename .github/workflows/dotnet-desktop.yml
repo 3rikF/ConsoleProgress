@@ -46,22 +46,24 @@ on:
 
 jobs:
 
+  #----------------------------------------------------------------------------------------------------------------------------------------
   build:
 
     strategy:
       matrix:
-        configuration: [Debug, Release]
+        CONFIGURATION: [Debug, Release]
 
-    runs-on: windows-latest  # For a list of available runner types, refer to
-                             # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    # For a list of available runner types, refer to
+    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
+    runs-on: windows-latest
 
     env:
-      # set consol column widht so the [TextFormatting] test might not fail (left to be seen)
-      COLUMNS: 120    
-      
+      # set consol column widht so a certain [TextFormatting]-test might not fail
+      COLUMNS: 120
+
       # Replace with your solution name, i.e. MyWpfApp.sln.
-      Solution_Name: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBar.sln
-      
+      SOLUTION_NAME: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBar.sln
+
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       # Deactivated Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
@@ -85,24 +87,25 @@ jobs:
     # Execute all unit tests in the solution
     - name: Execute unit tests
       # a simple "dotnet test" does not work, regardless of how/what  path is set - only directly per parameter works
-      # maybe the same problem as hiere https://github.com/dotnet/sdk/issues/28983
+      # maybe the same problem as here https://github.com/dotnet/sdk/issues/28983
       run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj" --collect:"XPlat Code Coverage;Format=json,cobertura"
 
     # taken from a Codecov example
     - name: Upload results to Codecov
       uses: codecov/codecov-action@v4
       with:
-        token: ${{ secrets.CODECOV_TOKEN }}
+        token: ${{secrets.CODECOV_TOKEN}}
         files: ./coverage/**/*.xml
         flags: unittests
     #    name: codecov-umbrella
-        
+
     # Restore the application to populate the obj folder with RuntimeIdentifiers
     - name: Restore the application
-      run: msbuild $env:Solution_Name /t:Restore /p:Configuration=$env:Configuration
+      run: msbuild $env:SOLUTION_NAME /t:Restore /p:Configuration=$env:Configuration
       env:
-        Configuration: ${{ matrix.configuration }}
+        Configuration: ${{ matrix.CONFIGURATION }}
 
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Deactivated
 #    # Decode the base 64 encoded pfx and save the Signing_Certificate
 #    - name: Decode the pfx
@@ -118,7 +121,7 @@ jobs:
 #        Appx_Bundle: Always
 #        Appx_Bundle_Platforms: x86|x64
 #        Appx_Package_Build_Mode: StoreUpload
-#        Configuration: ${{ matrix.configuration }}
+#        Configuration: ${{ matrix.CONFIGURATION }}
 #
 #    # Remove the pfx
 #    - name: Remove the pfx
