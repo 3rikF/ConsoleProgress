@@ -126,7 +126,7 @@ jobs:
           #breakAt: "75" # Optional
 
       - name: Upload mutation test report
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: html-report
           path: ${{github.workspace}}/$env:TEST_PATH/StrykerOutput/**/*.html
