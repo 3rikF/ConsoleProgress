@@ -105,33 +105,7 @@ jobs:
       env:
         Configuration: ${{ matrix.CONFIGURATION }}
 
-  #----------------------------------------------------------------------------------------------------------------------------------------
-  mutation-test:
-    # For a list of available runner types, refer to
-    # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    runs-on: linux-latest
-
-    env:
-      TEST_PATH: ConsoleProgressBar/ConsoleProgressBarTests
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Run Stryker mutation tests
-        uses: stryker-mutator/github-action@v0.0.1
-        with:
-          # maybe the env-var is not available here
-          testProject: $env:TEST_PATH
-          #breakAt: "75" # Optional
-
-      - name: Upload mutation test report
-        uses: actions/upload-artifact@v4
-        with:
-          name: html-report
-          path: ${{github.workspace}}/$env:TEST_PATH/StrykerOutput/**/*.html
-
-
+#------------------------------------------------------------------------------------------------------------------------------------------
 # Deactivated
 #    # Decode the base 64 encoded pfx and save the Signing_Certificate
 #    - name: Decode the pfx
