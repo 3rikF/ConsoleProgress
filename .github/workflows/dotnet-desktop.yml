@@ -109,7 +109,7 @@ jobs:
   mutation-test:
     # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    runs-on: windows-latest
+    runs-on: linux-latest
 
     env:
       TEST_PATH: ConsoleProgressBar/ConsoleProgressBarTests
