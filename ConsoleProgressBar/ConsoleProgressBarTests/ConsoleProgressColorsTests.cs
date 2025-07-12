@@ -4,25 +4,16 @@
 using ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-
 namespace ConsoleProgressColorsTests;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 public sealed class ConsoleProgressColorsTests
 {
-	//-------------------------------------------------------------------------------------------------------------
-	#region Properties
-
-	private ITestOutputHelper TestConsole
-		=> toh;
-
-	#endregion Properties
-
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Test Methods
 
 	[Fact]
-	public void ConsoleProgressColors_Constructor1()
+	public void CTor_SingleColor()
 	{
 		//--- Arrange ---------------------------------------------------------
 		ConsoleColor activeBar = ConsoleColor.Blue;
@@ -38,7 +29,7 @@ public sealed class ConsoleProgressColorsTests
 	}
 
 	[Fact]
-	public void ConsoleProgressColors_Constructor2()
+	public void Ctor_ActiveAndFractionColor()
 	{
 		//--- Arrange ---------------------------------------------------------
 		ConsoleColor activeBar		= ConsoleColor.Blue;
@@ -55,7 +46,7 @@ public sealed class ConsoleProgressColorsTests
 	}
 
 	[Fact]
-	public void ConsoleProgressColors_Constructor3()
+	public void Ctor_ActiveInactiveAndFractionColor()
 	{
 		//--- Arrange ---------------------------------------------------------
 		ConsoleColor activeBar = ConsoleColor.Blue;
@@ -73,7 +64,7 @@ public sealed class ConsoleProgressColorsTests
 	}
 
 	[Fact]
-	public void ConsoleProgressColors_Constructor4()
+	public void Ctor_AllTheColors()
 	{
 		//--- Arrange ---------------------------------------------------------
 		ConsoleColor activeBar		= ConsoleColor.Blue;
@@ -90,5 +81,48 @@ public sealed class ConsoleProgressColorsTests
 		Assert.Equal(inactiveBar,	uut.InactiveBar);
 		Assert.Equal(background,	uut.Background);
 	}
+
+	[Fact]
+	public void Record_EqualityAndHashCode()
+	{
+		//--- Arrange ---------------------------------------------------------
+		ConsoleProgressColors uut1 = new(ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.DarkCyan, ConsoleColor.Black) { Name = "Test1" };
+		ConsoleProgressColors uut2 = new(ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.DarkCyan, ConsoleColor.Black) { Name = "Test1" };
+		ConsoleProgressColors uut3 = new(ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.DarkCyan, ConsoleColor.Black) { Name = "Test2" };
+
+		//--- Act & Assert ----------------------------------------------------
+		Assert.Equal(uut1,		uut2);
+		Assert.NotEqual(uut1,	uut3);
+
+		Assert.True(uut1 == uut2);
+		Assert.True(uut1 != uut3);
+
+		Assert.False(uut1 != uut2);
+		Assert.False(uut1 == uut3);
+
+		Assert.Equal(uut1.GetHashCode(), uut2.GetHashCode());
+		Assert.NotEqual(uut1.GetHashCode(), uut3.GetHashCode());
+	}
+
+	[Fact]
+	public void Record_CloneWith()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		ConsoleProgressColors original = new(ConsoleColor.Blue, ConsoleColor.Cyan, ConsoleColor.DarkCyan, ConsoleColor.Black) { Name = "Original" };
+
+		//--- ACT -------------------------------------------------------------
+		ConsoleProgressColors clone = original with { Name = "Clone" };
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.NotSame( original, clone );
+		Assert.Equal( original.ActiveBar, clone.ActiveBar );
+		Assert.Equal( original.FractionBar, clone.FractionBar );
+		Assert.Equal( original.InactiveBar, clone.InactiveBar );
+		Assert.Equal( original.Background, clone.Background );
+		Assert.NotEqual( original.Name, clone.Name );
+		Assert.Equal( "Original", original.Name );
+		Assert.Equal( "Clone", clone.Name );
+	}
+
 	#endregion Test Methods
 }
