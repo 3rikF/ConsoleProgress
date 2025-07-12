@@ -103,11 +103,11 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		//-- check, that [GetEnumerator()] is only called once ---
 		mockEnumerable.Setup(m => m.GetEnumerator())
 			.Returns((testData as IEnumerable<byte>).GetEnumerator())
-			.Verifiable(Times.Once);
+			.Verifiable(Times.Once());
 
 		//--- given [WithPreCount], this should not be called ---
 		mockEnumerable.Setup(m => m.Count)
-			.Verifiable(Times.Never);
+			.Verifiable(Times.Never());
 
 		ProgressProxy<byte> sut = mockEnumerable.Object
 			.ConsoleProgress()
@@ -152,7 +152,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		//--- this will be called internally by [ProgressProxy] to get the item count for the progress bar ---
 		mockEnumerable.Setup(m => m.Count)
 			.Returns(testData.Length)
-			.Verifiable(Times.Once);
+			.Verifiable(Times.Once());
 
 		//--- this will be called by the [ProgressProxy] to iterate over the items ---
 		mockEnumerator.Setup(m => m.MoveNext())
@@ -198,12 +198,12 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		//--- this will be called internally by [ProgressProxy] to get the enumerator ---
 		mockEnumerable.Setup(m => m.GetEnumerator())
 			.Returns((testData as IEnumerable<byte>).GetEnumerator())
-			.Verifiable(Times.Once);
+			.Verifiable(Times.Once());
 
 		//--- this will be called internally by [ProgressProxy] to get the item count for the progress bar ---
 		mockEnumerable.Setup(m => m.Count)
 			.Returns(testData.Length)
-			.Verifiable(Times.Never);
+			.Verifiable(Times.Never());
 
 		//--- this will be called by the [ProgressProxy] to iterate over the items ---
 		mockEnumerator.Setup(m => m.MoveNext())
