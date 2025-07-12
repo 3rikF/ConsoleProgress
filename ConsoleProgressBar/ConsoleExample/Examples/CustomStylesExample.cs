@@ -1,7 +1,10 @@
-﻿using ConsoleProgressBar;
+﻿
+using ConsoleProgressBar;
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleExample.Examples;
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
 internal sealed class CustomStylesExample(string name, ExampleBase header) : ExampleBase(name, header)
 {
 	private readonly ConsoleProgressStyle[] _customProgressStyles =

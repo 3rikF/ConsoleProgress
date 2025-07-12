@@ -3,12 +3,12 @@
 
 using ConsoleProgressBar;
 
-using Xunit.Abstractions;
+//-----------------------------------------------------------------------------------------------------------------------------------------
 
 namespace ConsoleProgressColorsTests;
 
-//[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
-public class ConsoleProgressColorsTests(ITestOutputHelper toh)
+//-----------------------------------------------------------------------------------------------------------------------------------------
+public sealed class ConsoleProgressColorsTests
 {
 	//-------------------------------------------------------------------------------------------------------------
 	#region Properties
