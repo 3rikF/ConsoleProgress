@@ -39,8 +39,14 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
 
+    # DEBUG
+    - name: List files
+      run: ls -R
+      
     - name: Build
+      working-directory: ./ConsoleProgressBar
       run: dotnet build $env:SOLUTION_NAME --configuration ${{ matrix.configuration }}
 
     - name: Execute unit tests
+      working-directory: ./ConsoleProgressBar
       run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
