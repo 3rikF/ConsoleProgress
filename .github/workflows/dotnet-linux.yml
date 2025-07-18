@@ -41,12 +41,13 @@ jobs:
       run: ls -R
       
     - name: Restore dependencies
-      run: dotnet restore
-      
-    - name: Build
+      run: dotnet restore ConsoleProgressBar.sln
       working-directory: ./ConsoleProgressBar
-      run: dotnet build $env:SOLUTION_NAME --configuration ${{ matrix.configuration }}
 
-    - name: Execute unit tests
+    - name: Build
+      run: dotnet build ConsoleProgressBar.sln --no-restore
       working-directory: ./ConsoleProgressBar
-      run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
+
+    - name: Test
+      run: dotnet test ConsoleProgressBar.sln --no-build --verbosity normal
+      working-directory: ./ConsoleProgressBar
