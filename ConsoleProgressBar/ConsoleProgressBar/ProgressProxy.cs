@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBar;
@@ -41,15 +42,11 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	//-------------------------------------------------------------------------------------------------------------
 	#region Methods
 
+	[MemberNotNull(nameof(TotalSteps))]
 	internal void UpdateTotalStepsIfUnset()
-	{
-		if (TotalSteps is null)
-		{
-			TotalSteps	= _collection.TryGetNonEnumeratedCount(out int count) ? count : _collection.Count();
-			TotalSteps	= Math.Max(1, TotalSteps.Value);
-		}
-	}
+		=> TotalSteps ??= Math.Max(1, _collection.Count());
 
+	[MemberNotNull(nameof(TotalSteps))]
 	protected virtual void InitProgress()
 		=> UpdateTotalStepsIfUnset();
 
@@ -59,10 +56,7 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 	private double GetProgress(int stepNum)
 	{
-		if (TotalSteps is null)
-			return 0D;
-
-		else if (TotalSteps == 0)
+		if (TotalSteps is null or 0)
 			return 1D;
 
 		else
