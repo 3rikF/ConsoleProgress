@@ -47,7 +47,7 @@ foreach (int number in numbers
 }
 ```
 
-![Default Styles Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/1_default_styles.gif)
+![Default Styles Example GIF](https://raw.githubusercontent.com/3rikF/ConsoleProgress/main/Readme/1_default_styles.gif)
 
 Of course it is possible to define own custom styles using the `ConsoleProgressStyle` class.
 
@@ -61,7 +61,7 @@ foreach (int number in numbers
 	// Do something with the number
 }
 ```
-![Custom Styles Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/2_custom_styles.gif)
+![Custom Styles Example GIF](https://raw.githubusercontent.com/3rikF/ConsoleProgress/main/Readme/2_custom_styles.gif)
 
 ## Colors
 
@@ -76,7 +76,7 @@ foreach (int number in numbers
 }
 ```
 
-![Default Colors Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/3_default_colors.gif)
+![Default Colors Example GIF](https://raw.githubusercontent.com/3rikF/ConsoleProgress/main/Readme/3_default_colors.gif)
 
 Colors can also be customized using the `.WithColor(…)` and `.WithBgColor(…)` extension methods.
 
@@ -94,7 +94,7 @@ foreach (int number in numbers
 
 The example console application `ConsoleExample` shows some random combinations of the available styles and colors for the progress bar.
 
-![Default Colors Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/4_random_examples.gif)
+![Default Colors Example GIF](https://raw.githubusercontent.com/3rikF/ConsoleProgress/main/Readme/4_random_examples.gif)
 
 ## Additional Features
 
