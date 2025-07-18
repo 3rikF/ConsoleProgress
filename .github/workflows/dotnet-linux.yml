@@ -26,7 +26,7 @@ jobs:
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       # Deactivated Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-    
+
     steps:
     - uses: actions/checkout@v4
 
@@ -38,7 +38,7 @@ jobs:
     # DEBUG
     - name: List files
       run: ls -R
-      
+
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_NAME
       #working-directory: ./ConsoleProgressBar
@@ -50,3 +50,30 @@ jobs:
     - name: Test
       run: dotnet test $SOLUTION_NAME --no-build --verbosity normal
       #working-directory: ./ConsoleProgressBar
+
+  pack_and_publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
+
+    #- name: Restore dependencies
+    #  run: dotnet restore ${{ env.SOLUTION_NAME }}
+
+    - name: Pack
+      run: dotnet pack ${{ env.SOLUTION_NAME }} --configuration Release --output ./artifacts --no-build
+
+    - name: Get package version
+      id: get_version
+      run: |
+        PACKAGE_VERSION=$(ls | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
+        echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+
+    - name: Publish
+      run: dotnet nuget push ./artifacts/*.nupkg --source github --api-key ${{ secrets.NUGET_API_KEY }}
