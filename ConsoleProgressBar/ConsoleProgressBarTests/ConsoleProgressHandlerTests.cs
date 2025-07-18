@@ -240,12 +240,12 @@ public sealed class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		{ }
 
 		//--- Assert ------------------------------------------------------
-		string[] lines =
-			[.. ci.Output
-				.Split("%]")
-				.Where(line => !string.IsNullOrWhiteSpace(line))
-				.Select(line => line.Trim()+"%]")
-			];
+		string[] lines = ci
+			.Output
+			.Split("%]")
+			.Where(line => !string.IsNullOrWhiteSpace(line))
+			.Select(line => line.Trim()+"%]")
+			.ToArray();
 
 		Assert.Equal(EXPECTED_LINES, lines.Length);
 
