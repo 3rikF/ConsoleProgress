@@ -5,47 +5,19 @@ using System.Diagnostics.CodeAnalysis;
 
 using ConsoleProgressBar;
 
+using ConsoleProgressBarTests.TestTools;
+
 using Moq;
 
 using Xunit.Abstractions;
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBarTests;
 
-//[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
-public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
+//-----------------------------------------------------------------------------------------------------------------------------------------
+public sealed class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 {
 	//-----------------------------------------------------------------------------------------------------------------
-	#region Nested Types
-
-	/// <summary>
-	/// Reroutes the console output to a string writer.
-	/// Resets the standard console output to the original one when disposing.
-	/// </summary>
-	private sealed class ConsoleInterceptor : IDisposable
-	{
-		private readonly StringWriter _sw;
-		private readonly TextWriter _oldOut;
-
-		public ConsoleInterceptor()
-		{
-			_sw		= new StringWriter();
-			_oldOut	= Console.Out;
-			Console.SetOut(_sw);
-		}
-
-		public string Output
-			=> _sw.ToString();
-
-		public void Dispose()
-		{
-			Console.SetOut(_oldOut);
-			_sw.Dispose();
-		}
-	}
-
-	#endregion Nested Types
-
-	//-------------------------------------------------------------------------------------------------------------
 	#region Properties
 
 	private ITestOutputHelper TestConsole
