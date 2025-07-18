@@ -17,6 +17,9 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	//-------------------------------------------------------------------------------------------------------------
 	#region Properties
 
+	internal IConsole Console
+		{ get; set; } = new ConsoleReal();
+
 	internal int? TotalSteps
 		{ get; set; }
 
@@ -32,9 +35,6 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	/// </summary>
 	public int? CancelAfter
 		{ get; internal set; }
-
-	internal bool DebugFlag
-		{ get; set; }
 
 	#endregion Properties
 
@@ -59,7 +59,6 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 	private double GetProgress(int stepNum)
 	{
-#pragma warning disable IDE0046 // In bedingten Ausdruck konvertieren
 		if (TotalSteps is null)
 			return 0D;
 
@@ -68,7 +67,6 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 		else
 			return double.Clamp(stepNum / (double)TotalSteps, 0.0, 1.0);
-#pragma warning restore IDE0046 // In bedingten Ausdruck konvertieren
 	}
 
 	/// <summary>
@@ -102,7 +100,6 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	{
 		InitProgress();
 		int stepNum = 0;
-
 
 		foreach (T item in GetActualEnumeration())
 		{

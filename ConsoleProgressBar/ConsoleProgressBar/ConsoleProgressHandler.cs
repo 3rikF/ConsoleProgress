@@ -9,17 +9,11 @@ using System.Text;
 //-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBar;
 
-// TODO: Why is this necessary? Why has it to be done *after* the namespace declaration?
-using Console = System.Console;
-
 //-----------------------------------------------------------------------------------------------------------------------------------------
-
 public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 {
 	//-----------------------------------------------------------------------------------------------------------------
 	#region Fields
-
-	internal const int DEBUG_CONSOLE_WIDTH = 80;
 
 	private int _topPos;
 	private int _lastProgress = -1;
@@ -29,8 +23,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 	//-------------------------------------------------------------------------------------------------------------
 	#region Construction
 
-	public ConsoleProgressHandler(IEnumerable<T> collection, string? action = null, string? item = null)
-
+	public ConsoleProgressHandler(IEnumerable<T> collection, string action, string item)
 		: base(collection, action, item)
 	{
 		if (Console.OutputEncoding != Encoding.UTF8)
@@ -67,20 +60,17 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 	#region Methods
 
 	//--- only for satisfying the IOS-principle (IOSP) ---
-	private static void NewLine()
+	private void NewLine()
 		=> Console.WriteLine();
 
 	private void ClearConsolLine(int topPos)
 	{
-		int width = DebugFlag ? DEBUG_CONSOLE_WIDTH : Console.WindowWidth;
-		if (!DebugFlag)
-			Console.SetCursorPosition(0, topPos);
-		Console.Write(new string(' ', width));
+		Console.SetCursorPosition(0, topPos);
+		Console.Write(new string(' ', Console.WindowWidth));
 	}
 
 	private void PrintProgress(int stepNum, double progress)
 	{
-		int consoleWidth = DebugFlag ? DEBUG_CONSOLE_WIDTH : Console.WindowWidth;
 
 		//---------------------------------------------------------------------
 		StringBuilder sbCaption = new ();
@@ -119,7 +109,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 		//---------------------------------------------------------------------
 		string caption	= sbCaption.ToString();
 		string ending	= sbEnding.ToString();
-		int barSpace	= consoleWidth -caption.Length -ending.Length;
+		int barSpace	= Console.WindowWidth -caption.Length -ending.Length;
 
 		if (MaxBarLength > 0)
 			barSpace = int.Min(MaxBarLength, barSpace);
@@ -131,13 +121,13 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 		byte fractionIndex		= (byte)((progressWidthF - progressWidth) * Style.ProgressCharFractions.Length);
 		bool hasFraction		= Style.ShowFractions && progressWidth < barSpace && Style.ProgressCharFractions.Length > 0;
 
-
 		_lastProgress = progressWidth;
 
 		//---------------------------------------------------------------------
-		if (!DebugFlag)
-			Console.SetCursorPosition(0, _topPos);
-		Console.Write($"{caption}");
+		Console.CursorVisible = false;
+		Console.SetCursorPosition(0, _topPos);
+
+		Console.Write(caption);
 
 		ConsoleColor oldColorFG	= Console.ForegroundColor;
 		ConsoleColor oldColorBG = Console.BackgroundColor;
@@ -168,6 +158,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 		}
 
 		Console.Write(ending);
+		Console.CursorVisible = true;
 	}
 
 	#endregion Methods
@@ -183,7 +174,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 		if (StartAtNewLine)
 			NewLine();
 
-		_topPos = DebugFlag ? 0 : Console.CursorTop;
+		_topPos = Console.CursorTop;
 
 		//--- clear whole console line  ---
 		ClearConsolLine(_topPos);
