@@ -30,7 +30,7 @@ public sealed class ConsoleProgressHandler<T> : ProgressProxy<T>
 			Console.OutputEncoding = Encoding.UTF8;
 	}
 
-	public ConsoleProgressHandler(T[] collection)
+	public ConsoleProgressHandler(IEnumerable<T> collection)
 		: base(collection)
 	{
 		if (Console.OutputEncoding != Encoding.UTF8)
