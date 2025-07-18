@@ -14,7 +14,7 @@ jobs:
 
     # For a list of available runner types, refer to
     # https://help.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
 
     env:
       # set consol column widht so a certain [TextFormatting]-test might not fail
@@ -34,13 +34,13 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
+        dotnet-version: '8.0.x' # Use latest LTS, adjust if your project uses a different version
 
     - name: Restore dependencies
       run: dotnet restore
 
     - name: Build
-      run: dotnet build $env:SOLUTION_NAME --configuration Release --no-restore
+      run: dotnet build $env:SOLUTION_NAME --configuration ${{ matrix.configuration }} --no-restore
 
-    - name: Test
+    - name: Execute unit tests
       run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
