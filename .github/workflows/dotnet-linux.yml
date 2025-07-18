@@ -21,7 +21,7 @@ jobs:
       COLUMNS: 120
 
       # Replace with your solution name, i.e. MyWpfApp.sln.
-      SOLUTION_NAME: "ConsoleProgressBar.sln"
+      SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
 
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
@@ -41,12 +41,12 @@ jobs:
       
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_NAME
-      working-directory: ./ConsoleProgressBar
+      #working-directory: ./ConsoleProgressBar
 
     - name: Build
       run: dotnet build $SOLUTION_NAME --no-restore
-      working-directory: ./ConsoleProgressBar
+      #working-directory: ./ConsoleProgressBar
 
     - name: Test
       run: dotnet test $SOLUTION_NAME --no-build --verbosity normal
-      working-directory: ./ConsoleProgressBar
+      #working-directory: ./ConsoleProgressBar
