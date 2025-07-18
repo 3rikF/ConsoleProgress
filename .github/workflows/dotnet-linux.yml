@@ -66,11 +66,12 @@ jobs:
     - name: Pack
       run: dotnet pack $SOLUTION_NAME --configuration Release --output ./artifacts
 
-    - name: Get package version
-      id: get_version
-      run: |
-        PACKAGE_VERSION=$(ls ./artifacts | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
-        echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+    # ERROR: Unable to process file command 'env' successfully. Invalid format 'nupkg'
+    #- name: Get package version
+    #  id: get_version
+    #  run: |
+    #    PACKAGE_VERSION=$(ls ./artifacts | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
+    #    echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
 
     - name: Publish
       run: dotnet nuget push ./artifacts/*.nupkg --source github --api-key ${{ secrets.NUGET_API_KEY }}
