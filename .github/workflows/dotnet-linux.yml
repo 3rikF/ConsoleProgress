@@ -3,8 +3,7 @@ name: .NET Linux Build & Test
 env:
   # Replace with your solution name, i.e. MyWpfApp.sln.
   SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
-  TOKEN: ${{ secrets.NUGET_API_KEY }}
-
+  
 on:
   push:
     branches: [ main ]
@@ -78,4 +77,4 @@ jobs:
     #    echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
 
     - name: Publish NuGet Package
-      run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $TOKEN
+      run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
