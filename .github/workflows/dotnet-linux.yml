@@ -67,7 +67,7 @@ jobs:
     #  run: dotnet restore ${{ env.SOLUTION_NAME }}
 
     - name: Pack
-      run: dotnet pack ${{ env.SOLUTION_NAME }} --configuration Release --output ./artifacts --no-build
+      run: dotnet pack ${{ env.SOLUTION_NAME }} --configuration Release --output ./artifacts
 
     - name: Get package version
       id: get_version
