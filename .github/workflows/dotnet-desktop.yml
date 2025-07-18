@@ -62,7 +62,7 @@ jobs:
       COLUMNS: 120
 
       # Replace with your solution name, i.e. MyWpfApp.sln.
-      SOLUTION_NAME: D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBar.sln
+      SOLUTION_NAME: "ConsoleProgressBar.sln"
 
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
@@ -88,7 +88,7 @@ jobs:
     - name: Execute unit tests
       # a simple "dotnet test" does not work, regardless of how/what  path is set - only directly per parameter works
       # maybe the same problem as here https://github.com/dotnet/sdk/issues/28983
-      run: dotnet test "D:\a\ConsoleProgress\ConsoleProgress\ConsoleProgressBar\ConsoleProgressBarTests\ConsoleProgressBarTests.csproj" --collect:"XPlat Code Coverage;Format=json,cobertura"
+      run: dotnet test $env:SOLUTION_NAME --collect:"XPlat Code Coverage;Format=json,cobertura"
 
     # taken from a Codecov example
     - name: Upload results to Codecov
