@@ -40,7 +40,7 @@ jobs:
       run: dotnet restore
 
     - name: Build
-      run: dotnet build $env:SOLUTION_NAME --configuration ${{ matrix.configuration }} --no-restore
+      run: dotnet build --configuration ${{ matrix.configuration }} --no-restore
 
     - name: Execute unit tests
-      run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
+      run: dotnet test --no-build --verbosity normal
