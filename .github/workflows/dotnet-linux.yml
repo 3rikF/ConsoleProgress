@@ -4,7 +4,7 @@ env:
   # Replace with your solution name, i.e. MyWpfApp.sln.
   SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
   PROJECT_PATH: "./ConsoleProgressBar/ConsoleProgressBar/ConsoleProgressBar.csproj"
-    
+
 on:
   push:
     branches: [ main ]
@@ -31,7 +31,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
+        dotnet-version: '9.0.x'
 
     # DEBUG
     #- name: List files
