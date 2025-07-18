@@ -7,7 +7,7 @@
 
 		<IsPackable>true</IsPackable>
 		<PackageId>ErikForwerk.ConsoleTools.ProgressBar</PackageId>
-		<Version>1.0.0</Version>
+		<Version>1.0.1</Version>
 		<Authors>Erik Forwerk</Authors>
 		<Company>-</Company>
 		<Description>This package provides functions to easily and conveniently display a progress bar in a C# console window when iterating over an enumeration. </Description>
