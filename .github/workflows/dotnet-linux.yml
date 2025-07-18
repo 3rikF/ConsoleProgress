@@ -79,4 +79,4 @@ jobs:
       run: dotnet nuget config get all
 
     - name: Publish NuGet Package
-      run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }}
+      run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source nuget.org
