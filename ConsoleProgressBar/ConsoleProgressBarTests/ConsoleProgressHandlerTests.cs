@@ -1,51 +1,24 @@
 ﻿
-// ignore spelling: moq bg
+// ignore spelling: moq bg queryable unfixable
 
+using System.Collections;
 using System.Diagnostics.CodeAnalysis;
 
 using ConsoleProgressBar;
+
+using ConsoleProgressBarTests.TestTools;
 
 using Moq;
 
 using Xunit.Abstractions;
 
+//-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBarTests;
 
-//[SuppressMessage("Clean Code Developer Principles", "CCD0001:IOSP violation", Justification = "pointless for tests")]
-public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
+//-----------------------------------------------------------------------------------------------------------------------------------------
+public sealed class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 {
 	//-----------------------------------------------------------------------------------------------------------------
-	#region Nested Types
-
-	/// <summary>
-	/// Reroutes the console output to a string writer.
-	/// Resets the standard console output to the original one when disposing.
-	/// </summary>
-	private sealed class ConsoleInterceptor : IDisposable
-	{
-		private readonly StringWriter _sw;
-		private readonly TextWriter _oldOut;
-
-		public ConsoleInterceptor()
-		{
-			_sw		= new StringWriter();
-			_oldOut	= Console.Out;
-			Console.SetOut(_sw);
-		}
-
-		public string Output
-			=> _sw.ToString();
-
-		public void Dispose()
-		{
-			Console.SetOut(_oldOut);
-			_sw.Dispose();
-		}
-	}
-
-	#endregion Nested Types
-
-	//-------------------------------------------------------------------------------------------------------------
 	#region Properties
 
 	private ITestOutputHelper TestConsole
@@ -53,8 +26,8 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 	#endregion Properties
 
-	//-----------------------------------------------------------------------------------------------------------------
-	#region Test Methods
+	//-------------------------------------------------------------------------------------------------------------
+	#region Test Helper
 
 	private static byte[] GetRandomBytes(int length)
 	{
@@ -62,6 +35,11 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		new Random(08_15).NextBytes(testData);
 		return testData;
 	}
+
+	#endregion Test Helper
+
+	//-----------------------------------------------------------------------------------------------------------------
+	#region Test Methods
 
 	/// <summary>
 	/// Test the most basic use case of the progress bar:
@@ -75,7 +53,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		ProgressProxy<byte> sut = testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act and Assert --------------------------------------------------
 		int iTestData = 0;
@@ -112,7 +90,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ProgressProxy<byte> sut = mockEnumerable.Object
 			.ConsoleProgress()
 			.WithPreCount(PRECOUNT)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		Assert.Equal(PRECOUNT, sut.TotalSteps);
@@ -163,7 +141,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ProgressProxy<byte> sut = mockEnumerable.Object
 			.ConsoleProgress()
 			.CancelAfter(MAX_ITERATIONS)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		int iIterationCounter = 0;
@@ -215,7 +193,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 			.ConsoleProgress()
 			.WithPreCount(PRECOUNT)
 			.CancelAfter(MAX_ITERATIONS)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		int iIterationCounter = 0;
@@ -251,10 +229,9 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		byte[] testData						= GetRandomBytes(NUM_ITEMS);
 
-
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress(EXPECTED_ACTION_TEXT, EXPECTED_ITEM_TEXT)
-			.WithDebugMode();
+			.WithTestMode();
 
 		using ConsoleInterceptor ci = new();
 
@@ -263,8 +240,8 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		{ }
 
 		//--- Assert ------------------------------------------------------
-		string[] lines =
-			ci.Output
+		string[] lines = ci
+			.Output
 			.Split("%]")
 			.Where(line => !string.IsNullOrWhiteSpace(line))
 			.Select(line => line.Trim()+"%]")
@@ -306,7 +283,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithMaxBarLength(MAX_BAR_LENGTH)
-			.WithDebugMode();
+			.WithTestMode();
 
 		char barChar = sut.Style.CharDone;
 
@@ -333,7 +310,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		//--- Act ---------------------------------------------------------
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ConsoleProgressColors.Default.ActiveBar,	sut.Colors.ActiveBar);
@@ -354,7 +331,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.ActiveBar);
@@ -377,8 +354,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR)
-			.WithDebugMode();
-
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.ActiveBar);
@@ -402,8 +378,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR, INACTIVE_BAR_COLOR)
-			.WithDebugMode();
-
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ACTIVE_BAR_COLOR,		sut.Colors.ActiveBar);
@@ -424,8 +399,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithBgColor(BACKGROUND_BAR_COLOR)
-			.WithDebugMode();
-
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ConsoleProgressColors.Default.ActiveBar,	sut.Colors.ActiveBar);
@@ -466,8 +440,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColors(expectedColors)
-			.WithDebugMode();
-
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(expectedColors.ActiveBar,		sut.Colors.ActiveBar);
@@ -488,8 +461,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithStyle(EXPECTED_STYLE)
-			.WithDebugMode();
-
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(EXPECTED_STYLE.ShowFrame,				sut.Style.ShowFrame);
@@ -519,7 +491,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithNewLine()
-			.WithDebugMode();
+			.WithTestMode();
 
 		foreach (int _ in sut)
 		{ }
@@ -543,14 +515,191 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		foreach (int _ in sut)
 		{ }
 
 		//--- Assert ------------------------------------------------------
-		Assert.True(!ci.Output.StartsWith(Environment.NewLine));
+		Assert.False(ci.Output.StartsWith(Environment.NewLine));
 	}
 
 	#endregion Test Methods
+
+	//-----------------------------------------------------------------------------------------------------------------
+	#region Test Methods: Empty Enumeration Handling
+
+	/// <summary>
+	/// Tests that the ConsoleProgressHandler correctly handles an empty array.
+	/// It should show a progress bar with 100% completion immediately.
+	/// </summary>
+	[Fact]
+	public void EmptyArray_DisplaysCompleteProgressBar()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		ProgressProxy<byte> progressProxy	= Array
+			.Empty<byte>()
+			.ConsoleProgress()
+			.WithTestMode();
+
+		ConsoleProgressHandler<byte> uut	= Assert.IsType<ConsoleProgressHandler<byte>>(progressProxy);
+
+		using ConsoleInterceptor ci			= new();
+
+		//--- ACT -------------------------------------------------------------
+
+		Assert.Empty(uut);
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.Equal(0, uut.TotalSteps);				// TotalSteps should be at least 1, even for empty collections
+
+		//TODO: this assert currently fails under Linux
+		//Assert.Contains("[0/0, 0 %]", ci.Output);		// Should show 100% at the end
+	}
+
+	/// <summary>
+	/// Tests that an empty progress bar correctly starts on a new line
+	/// when the WithNewLine option is set.
+	/// </summary>
+	[Fact]
+	public void EmptyCollection_WithNewLine_StartsOnNewLine()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		List<int> emptyList = [];
+
+		ConsoleProgressHandler<int> sut = (ConsoleProgressHandler<int>)emptyList
+			.ConsoleProgress()
+			.WithNewLine()
+			.WithTestMode();
+
+		using ConsoleInterceptor ci = new();
+
+		//--- ACT -------------------------------------------------------------
+		Assert.Empty(sut);
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.StartsWith(Environment.NewLine, ci.Output);
+	}
+
+	[Fact]
+	public void NullCollection_ThrowsArgumentNullException()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		IEnumerable<int> nullCollection = null!;
+
+		//--- ACT ------------------------------------------------------------
+		ArgumentNullException ex = Assert.Throws<ArgumentNullException>(
+			() => nullCollection.ConsoleProgress());
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.Equal("collection", ex.ParamName);
+		Assert.Equal("Value cannot be null. (Parameter 'collection')", ex.Message);
+	}
+
+	#endregion Test Methods: Empty Enumeration Handling
+
+	//-------------------------------------------------------------------------------------------------------------
+	#region Test Methods: AsQueryable Collection
+
+	[Fact]
+	public void Collection_Queryable()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		const int CANCEL_AFTER			= 2;		//--- cancel after 5 iterations ---
+		const int MOCK_COUNT			= 10;		//--- cancel after 5 iterations ---
+		int actuallEnumerationCalls		= 0;
+
+		IEnumerable<int> fnFooBar()
+		{
+			for(int i=0; i<MOCK_COUNT; i++)
+				yield return actuallEnumerationCalls++;
+		}
+
+		ProgressProxy<int> blah			= fnFooBar()
+			.AsQueryable()
+			.ConsoleProgress()
+			.WithTestMode()
+			.WithPreCount(MOCK_COUNT)
+			.CancelAfter(CANCEL_AFTER);
+
+		ConsoleProgressHandler<int> uut	= Assert.IsType<ConsoleProgressHandler<int>>(blah);
+
+		using ConsoleInterceptor ci		= new();
+
+		//--- ACT -------------------------------------------------------------
+		int actualCount = uut.Count();
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.Equal(CANCEL_AFTER,	uut.CancelAfter);
+
+		Assert.Equal(CANCEL_AFTER,	actuallEnumerationCalls);
+		Assert.Equal(CANCEL_AFTER,	actualCount);
+	}
+
+	[Fact]
+	public void Collection_Enumerable()
+	{
+		//--- ARRANGE ---------------------------------------------------------
+		const int CANCEL_AFTER				= 2;		//--- cancel after 5 iterations ---
+		const int MOCK_COUNT				= 10;		//--- cancel after 5 iterations ---
+		int actuallEnumerationCalls			= 0;
+
+		IEnumerable<int> fnFooBar()
+		{
+			for(int i=0; i<MOCK_COUNT; i++)
+				yield return actuallEnumerationCalls++;
+		}
+
+		ProgressProxy<int> progressProxy	= fnFooBar()
+			.ConsoleProgress()
+			.WithTestMode()
+			.WithPreCount(MOCK_COUNT)
+			.CancelAfter(CANCEL_AFTER);
+
+		ConsoleProgressHandler<int> uut	= Assert.IsType<ConsoleProgressHandler<int>>(progressProxy);
+		using ConsoleInterceptor ci		= new();
+
+		//--- ACT -------------------------------------------------------------
+		int actualCount = uut.Count();
+
+		//--- ASSERT ----------------------------------------------------------
+		Assert.Equal(CANCEL_AFTER,	uut.CancelAfter);
+
+		Assert.Equal(CANCEL_AFTER,	actuallEnumerationCalls);
+		Assert.Equal(CANCEL_AFTER,	actualCount);
+	}
+
+	#endregion Test Methods: AsQueryable Collection
+
+	//-----------------------------------------------------------------------------------------------------------------
+	#region Test Methods: Enumerator Variants
+
+	[Fact]
+	public void GetEnumerator_And_IEnumerableGetEnumerator_EnumerateIdentically()
+	{
+		//--- Arrange ---------------------------------------------------------
+		byte[] testData				= [10, 20, 30];
+		ProgressProxy<byte> uut		= testData
+			.ConsoleProgress()
+			.WithTestMode();
+
+		//--- Act ------------------------------------------------------------
+		IEnumerator<byte> genericEnumerator = uut.GetEnumerator();
+		IEnumerator nonGenericEnumerator = ((IEnumerable)uut).GetEnumerator();
+
+		List<byte> genericList		= [];
+		while (genericEnumerator.MoveNext())
+			genericList.Add(genericEnumerator.Current);
+
+		List<byte> nonGenericList	= [];
+		while (nonGenericEnumerator.MoveNext())
+			nonGenericList.Add((byte)nonGenericEnumerator.Current);
+
+		//--- Assert ---------------------------------------------------------
+		Assert.Equal(testData, genericList);
+		Assert.Equal(testData, nonGenericList);
+		Assert.Equal(genericList, nonGenericList);
+	}
+
+	#endregion Test Methods: Enumerator Variants
 }

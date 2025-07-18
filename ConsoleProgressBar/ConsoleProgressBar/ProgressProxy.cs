@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using System.Diagnostics.CodeAnalysis;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 namespace ConsoleProgressBar;
@@ -17,6 +18,9 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	//-------------------------------------------------------------------------------------------------------------
 	#region Properties
 
+	internal IConsole Console
+		{ get; set; } = new ConsoleReal();
+
 	internal int? TotalSteps
 		{ get; set; }
 
@@ -33,23 +37,16 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	public int? CancelAfter
 		{ get; internal set; }
 
-	internal bool DebugFlag
-		{ get; set; }
-
 	#endregion Properties
 
 	//-------------------------------------------------------------------------------------------------------------
 	#region Methods
 
+	[MemberNotNull(nameof(TotalSteps))]
 	internal void UpdateTotalStepsIfUnset()
-	{
-		if (TotalSteps is null)
-		{
-			TotalSteps	= _collection.TryGetNonEnumeratedCount(out int count) ? count : _collection.Count();
-			TotalSteps	= Math.Max(1, TotalSteps.Value);
-		}
-	}
+		=> TotalSteps ??= Math.Max(0, _collection.Count());
 
+	[MemberNotNull(nameof(TotalSteps))]
 	protected virtual void InitProgress()
 		=> UpdateTotalStepsIfUnset();
 
@@ -57,19 +54,12 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 
 	protected abstract void FinishProgress();
 
+	/// <summary>Calculates the progress of a process as a fraction of completion.</summary>
+	/// <remarks>Cannot be called if <see cref="TotalSteps"/> is not set or null.</remarks>
+	/// <param name="stepNum">The current step number, which must be a non-negative integer.</param>
+	/// <returns>A double value representing the progress, clamped between 0.0 and 1.0.</returns>
 	private double GetProgress(int stepNum)
-	{
-#pragma warning disable IDE0046 // In bedingten Ausdruck konvertieren
-		if (TotalSteps is null)
-			return 0D;
-
-		else if (TotalSteps == 0)
-			return 1D;
-
-		else
-			return double.Clamp(stepNum / (double)TotalSteps, 0.0, 1.0);
-#pragma warning restore IDE0046 // In bedingten Ausdruck konvertieren
-	}
+		=> double.Clamp(stepNum / (double)TotalSteps!, 0.0, 1.0);
 
 	/// <summary>
 	/// If <see cref="CancelAfter"/> is set, the enumeration will be limited to this number of items.
@@ -78,19 +68,13 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	/// <returns>New enumerable with the actual number of items to iterate over</returns>
 	private IEnumerable<T> GetActualEnumeration()
 	{
+		//--- [AsQueryable] is important when the enumerable is a EntityFramework query ---
+		//--- otherwise the query will be executed completely even if the foreach loop is canceled ---
 		if (CancelAfter.HasValue)
-		{
-			//--- this is important when the enumerable is a EntityFramework query ---
-			//--- otherwise the query will be executed completely even if the foreach loop is canceled ---
-			IEnumerable<T> tmp = _collection
-				.AsQueryable()
-				.Take(CancelAfter.Value);
+			return _collection.AsQueryable().Take(CancelAfter.Value);
 
-			//--- fall-back if something goes wrong with the query-able ---
-			return tmp ?? _collection.Take(CancelAfter.Value);
-		}
-
-		return _collection;
+		else
+			return _collection;
 	}
 
 	#endregion Methods
@@ -102,7 +86,6 @@ public abstract class ProgressProxy<T>(IEnumerable<T> collection, string? action
 	{
 		InitProgress();
 		int stepNum = 0;
-
 
 		foreach (T item in GetActualEnumeration())
 		{

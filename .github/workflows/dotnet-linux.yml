@@ -50,6 +50,7 @@ jobs:
       #working-directory: ./ConsoleProgressBar
 
   pack_and_publish:
+    if: github.event_name == 'push'
     needs: build
     runs-on: ubuntu-latest
 
