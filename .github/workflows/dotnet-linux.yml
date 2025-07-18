@@ -36,8 +36,8 @@ jobs:
         dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
 
     # DEBUG
-    - name: List files
-      run: ls -R
+    #- name: List files
+    #  run: ls -R
 
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_NAME
@@ -64,10 +64,10 @@ jobs:
         dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
 
     #- name: Restore dependencies
-    #  run: dotnet restore ${{ env.SOLUTION_NAME }}
+    #  run: dotnet restore $SOLUTION_NAME
 
     - name: Pack
-      run: dotnet pack ${{ env.SOLUTION_NAME }} --configuration Release --output ./artifacts
+      run: dotnet pack $SOLUTION_NAME --configuration Release --output ./artifacts
 
     - name: Get package version
       id: get_version
