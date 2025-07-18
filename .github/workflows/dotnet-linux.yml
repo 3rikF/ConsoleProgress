@@ -40,13 +40,13 @@ jobs:
       run: ls -R
       
     - name: Restore dependencies
-      run: dotnet restore $env:SOLUTION_NAME
+      run: dotnet restore $SOLUTION_NAME
       working-directory: ./ConsoleProgressBar
 
     - name: Build
-      run: dotnet build $env:SOLUTION_NAME --no-restore
+      run: dotnet build $SOLUTION_NAME --no-restore
       working-directory: ./ConsoleProgressBar
 
     - name: Test
-      run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
+      run: dotnet test $SOLUTION_NAME --no-build --verbosity normal
       working-directory: ./ConsoleProgressBar
