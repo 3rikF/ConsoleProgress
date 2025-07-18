@@ -3,8 +3,10 @@
 ## Current Status
 
 [![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-desktop.yml/badge.svg)](https://github.com/3rikF/ConsoleProgress/actions) 
+[![Current Repository Status](https://github.com/3rikF/ConsoleProgress/actions/workflows/dotnet-linux.yml/badge.svg)](https://github.com/3rikF/ConsoleProgress/actions) 
 [![Codecov Test Coverage](https://codecov.io/gh/3rikF/ConsoleProgress/graph/badge.svg?token=6DBLGNQC73)](https://codecov.io/gh/3rikF/ConsoleProgress) 
 [![WakaTime Tracking](https://wakatime.com/badge/user/ccce5eac-49f0-481f-998c-1183a3cd0b18/project/22dc24f9-97a1-4b21-a674-e2b3a8c44b91.svg?Style=flat)](https://wakatime.com/badge/user/ccce5eac-49f0-481f-998c-1183a3cd0b18/project/22dc24f9-97a1-4b21-a674-e2b3a8c44b91)
+[![NuGet](https://img.shields.io/nuget/v/ErikForwerk.ConsoleTools.ProgressBar.svg)](https://www.nuget.org/packages/ErikForwerk.ConsoleTools.ProgressBar/)
 
 ## Table of Contents
 - [Console Progress Bar](#console-progress-bar)
@@ -45,7 +47,7 @@ foreach (int number in numbers
 }
 ```
 
-![Default Styles Example GIF](Readme/1_default_styles.gif)
+![Default Styles Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/1_default_styles.gif)
 
 Of course it is possible to define own custom styles using the `ConsoleProgressStyle` class.
 
@@ -59,7 +61,7 @@ foreach (int number in numbers
 	// Do something with the number
 }
 ```
-![Custom Styles Example GIF](Readme/2_custom_styles.gif)
+![Custom Styles Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/2_custom_styles.gif)
 
 ## Colors
 
@@ -74,7 +76,7 @@ foreach (int number in numbers
 }
 ```
 
-![Default Colors Example GIF](Readme/3_default_colors.gif)
+![Default Colors Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/3_default_colors.gif)
 
 Colors can also be customized using the `.WithColor(…)` and `.WithBgColor(…)` extension methods.
 
@@ -92,7 +94,7 @@ foreach (int number in numbers
 
 The example console application `ConsoleExample` shows some random combinations of the available styles and colors for the progress bar.
 
-![Default Colors Example GIF](Readme/4_random_examples.gif)
+![Default Colors Example GIF](https://github.com/3rikF/ConsoleProgress/blob/main/Readme/4_random_examples.gif)
 
 ## Additional Features
 

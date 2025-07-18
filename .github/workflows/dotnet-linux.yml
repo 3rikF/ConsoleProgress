@@ -1,5 +1,10 @@
 name: .NET Linux Build & Test
 
+env:
+  # Replace with your solution name, i.e. MyWpfApp.sln.
+  SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
+  PROJECT_PATH: "./ConsoleProgressBar/ConsoleProgressBar/ConsoleProgressBar.csproj"
+
 on:
   push:
     branches: [ main ]
@@ -20,25 +25,18 @@ jobs:
       # set consol column widht so a certain [TextFormatting]-test might not fail
       COLUMNS: 120
 
-      # Replace with your solution name, i.e. MyWpfApp.sln.
-      SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
-
-      # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
-      # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
-      # Deactivated Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-    
     steps:
     - uses: actions/checkout@v4
 
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
+        dotnet-version: '9.0.x'
 
     # DEBUG
-    - name: List files
-      run: ls -R
-      
+    #- name: List files
+    #  run: ls -R
+
     - name: Restore dependencies
       run: dotnet restore $SOLUTION_NAME
       #working-directory: ./ConsoleProgressBar
@@ -50,3 +48,37 @@ jobs:
     - name: Test
       run: dotnet test $SOLUTION_NAME --no-build --verbosity normal
       #working-directory: ./ConsoleProgressBar
+
+  pack_and_publish:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
+
+    #- name: Restore dependencies
+    #  run: dotnet restore $SOLUTION_NAME
+
+    - name: Print DotNet NuGet Version
+      run: dotnet nuget --version
+
+    - name: Pack NuGet Package
+      run: dotnet pack $PROJECT_PATH --configuration Release --output ./artifacts
+
+    ## ERROR: Unable to process file command 'env' successfully. Invalid format 'nupkg'
+    ## check use of if necessary: PACKAGE_VERSION=$(dotnet list package --include-transitive | grep '<YourPackageName>' | awk '{print $4}')
+    #- name: Get package version
+    #  id: get_version
+    #  run: |
+    #    PACKAGE_VERSION=$(ls ./artifacts | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
+    #    echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+    - name: DEBUG - Config / Endpoints
+      run: dotnet nuget config get all
+
+    - name: Publish NuGet Package
+      run: dotnet nuget push ./artifacts/*.nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
