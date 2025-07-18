@@ -36,12 +36,12 @@ jobs:
       with:
         dotnet-version: '8.0.x' # Use latest LTS, adjust if your project uses a different version
 
-    - name: Restore dependencies
-      run: dotnet restore
-
     # DEBUG
     - name: List files
       run: ls -R
+      
+    - name: Restore dependencies
+      run: dotnet restore
       
     - name: Build
       working-directory: ./ConsoleProgressBar
