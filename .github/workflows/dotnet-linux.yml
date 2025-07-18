@@ -75,6 +75,8 @@ jobs:
     #  run: |
     #    PACKAGE_VERSION=$(ls ./artifacts | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
     #    echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
+    - name: DEBUG - Config / Endpoints
+      run: dotnet nuget config get all
 
     - name: Publish NuGet Package
       run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
