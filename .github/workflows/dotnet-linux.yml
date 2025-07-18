@@ -70,7 +70,8 @@ jobs:
     - name: Pack NuGet Package
       run: dotnet pack $PROJECT_PATH --configuration Release --output ./artifacts
 
-    # ERROR: Unable to process file command 'env' successfully. Invalid format 'nupkg'
+    ## ERROR: Unable to process file command 'env' successfully. Invalid format 'nupkg'
+    ## check use of if necessary: PACKAGE_VERSION=$(dotnet list package --include-transitive | grep '<YourPackageName>' | awk '{print $4}')
     #- name: Get package version
     #  id: get_version
     #  run: |
