@@ -3,6 +3,7 @@ name: .NET Linux Build & Test
 env:
   # Replace with your solution name, i.e. MyWpfApp.sln.
   SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
+  TOKEN: ${{ secrets.NUGET_API_KEY }}
 
 on:
   push:
@@ -63,7 +64,10 @@ jobs:
     #- name: Restore dependencies
     #  run: dotnet restore $SOLUTION_NAME
 
-    - name: Pack
+    - name: Print DotNet NuGet Version
+      run: dotnet nuget --version
+
+    - name: Pack NuGet Package
       run: dotnet pack $SOLUTION_NAME --configuration Release --output ./artifacts
 
     # ERROR: Unable to process file command 'env' successfully. Invalid format 'nupkg'
@@ -73,5 +77,5 @@ jobs:
     #    PACKAGE_VERSION=$(ls ./artifacts | grep .nupkg | sed 's/.*\.//' | sed 's/\.nupkg$//')
     #    echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
 
-    - name: Publish
-      run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }}
+    - name: Publish NuGet Package
+      run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key $TOKEN
