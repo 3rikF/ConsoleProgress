@@ -37,8 +37,9 @@ public sealed class TestConsoleTests
 	public void ForegroundColor_GetSet_ForwardsToConsole()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut					= new();
+		ConsoleTest uut						= new();
 		const ConsoleColor EXPECTED_COLOR	= ConsoleColor.Magenta;
+		var originalConsoleColor			= Console.ForegroundColor;
 
 		//--- ACT ------------------------------------------------------------
 		uut.ForegroundColor					= EXPECTED_COLOR;
@@ -47,7 +48,8 @@ public sealed class TestConsoleTests
 		Assert.Equal(EXPECTED_COLOR, uut.ForegroundColor);
 
 		//--- will not change the actual console color ---
-		Assert.Equal(ConsoleColor.Gray,	Console.ForegroundColor);
+		// windows returns gray, linux returns -1
+		Assert.Equal(originalConsoleColor,	Console.ForegroundColor);
 	}
 
 	[Fact]
@@ -55,7 +57,8 @@ public sealed class TestConsoleTests
 	{
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut				= new();
-		ConsoleColor expectedColor		= ConsoleColor.DarkCyan;
+		ConsoleColor expectedColor	= ConsoleColor.DarkCyan;
+		var originalConsoleColor	= Console.BackgroundColor;
 
 		//--- ACT ---------------------------------------------------------
 		uut.BackgroundColor = expectedColor;
@@ -64,7 +67,7 @@ public sealed class TestConsoleTests
 		Assert.Equal(expectedColor,	uut.BackgroundColor);
 
 		//--- will not change the actual console color ---
-		Assert.Equal(ConsoleColor.Black,	Console.BackgroundColor);
+		Assert.Equal(originalConsoleColor,	Console.BackgroundColor);
 	}
 
 	[Fact]
