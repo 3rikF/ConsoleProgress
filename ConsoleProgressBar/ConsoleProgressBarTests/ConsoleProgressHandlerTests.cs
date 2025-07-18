@@ -75,7 +75,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		ProgressProxy<byte> sut = testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act and Assert --------------------------------------------------
 		int iTestData = 0;
@@ -112,7 +112,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ProgressProxy<byte> sut = mockEnumerable.Object
 			.ConsoleProgress()
 			.WithPreCount(PRECOUNT)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		Assert.Equal(PRECOUNT, sut.TotalSteps);
@@ -163,7 +163,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ProgressProxy<byte> sut = mockEnumerable.Object
 			.ConsoleProgress()
 			.CancelAfter(MAX_ITERATIONS)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		int iIterationCounter = 0;
@@ -215,7 +215,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 			.ConsoleProgress()
 			.WithPreCount(PRECOUNT)
 			.CancelAfter(MAX_ITERATIONS)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Act -------------------------------------------------------------
 		int iIterationCounter = 0;
@@ -254,7 +254,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress(EXPECTED_ACTION_TEXT, EXPECTED_ITEM_TEXT)
-			.WithDebugMode();
+			.WithTestMode();
 
 		using ConsoleInterceptor ci = new();
 
@@ -306,7 +306,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithMaxBarLength(MAX_BAR_LENGTH)
-			.WithDebugMode();
+			.WithTestMode();
 
 		char barChar = sut.Style.CharDone;
 
@@ -333,7 +333,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		//--- Act ---------------------------------------------------------
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ConsoleProgressColors.Default.ActiveBar,	sut.Colors.ActiveBar);
@@ -354,7 +354,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR)
-			.WithDebugMode();
+			.WithTestMode();
 
 		//--- Assert ------------------------------------------------------
 		Assert.Equal(ACTIVE_BAR_COLOR, sut.Colors.ActiveBar);
@@ -377,7 +377,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR)
-			.WithDebugMode();
+			.WithTestMode();
 
 
 		//--- Assert ------------------------------------------------------
@@ -402,7 +402,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColor(ACTIVE_BAR_COLOR, FRACTION_BAR_COLOR, INACTIVE_BAR_COLOR)
-			.WithDebugMode();
+			.WithTestMode();
 
 
 		//--- Assert ------------------------------------------------------
@@ -424,7 +424,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithBgColor(BACKGROUND_BAR_COLOR)
-			.WithDebugMode();
+			.WithTestMode();
 
 
 		//--- Assert ------------------------------------------------------
@@ -466,7 +466,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithColors(expectedColors)
-			.WithDebugMode();
+			.WithTestMode();
 
 
 		//--- Assert ------------------------------------------------------
@@ -488,7 +488,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithStyle(EXPECTED_STYLE)
-			.WithDebugMode();
+			.WithTestMode();
 
 
 		//--- Assert ------------------------------------------------------
@@ -519,7 +519,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
 			.WithNewLine()
-			.WithDebugMode();
+			.WithTestMode();
 
 		foreach (int _ in sut)
 		{ }
@@ -543,7 +543,7 @@ public class ConsoleProgressHandlerTests(ITestOutputHelper toh)
 
 		ConsoleProgressHandler<byte> sut = (ConsoleProgressHandler<byte>)testData
 			.ConsoleProgress()
-			.WithDebugMode();
+			.WithTestMode();
 
 		foreach (int _ in sut)
 		{ }

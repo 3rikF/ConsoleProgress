@@ -34,7 +34,7 @@ public static class ProgressProxyExtensions
 		return progress;
 	}
 
-	internal static ProgressProxy<T> WithDebugMode<T>(this ProgressProxy<T> progress)
+	internal static ProgressProxy<T> WithTestMode<T>(this ProgressProxy<T> progress)
 	{
 		progress.Console = new ConsoleTest();
 		return progress;
