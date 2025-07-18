@@ -21,7 +21,7 @@ jobs:
       COLUMNS: 120
 
       # Replace with your solution name, i.e. MyWpfApp.sln.
-      SOLUTION_NAME: " ./ConsoleProgressBar/ConsoleProgressBar.sln"
+      SOLUTION_NAME: "./ConsoleProgressBar.sln"
 
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
@@ -44,9 +44,9 @@ jobs:
       run: dotnet restore
       
     - name: Build
-      #working-directory: ./ConsoleProgressBar
+      working-directory: ./ConsoleProgressBar
       run: dotnet build $env:SOLUTION_NAME --configuration ${{ matrix.configuration }}
 
     - name: Execute unit tests
-      #working-directory: ./ConsoleProgressBar
+      working-directory: ./ConsoleProgressBar
       run: dotnet test $env:SOLUTION_NAME --no-build --verbosity normal
