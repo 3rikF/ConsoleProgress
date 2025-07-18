@@ -26,7 +26,6 @@ jobs:
       # Deactivated Test_Project_Path: your-test-project-path                 # Replace with the path to your test project, i.e. MyWpfApp.Tests\MyWpfApp.Tests.csproj.
       # Deactivated Wap_Project_Directory: your-wap-project-directory-name    # Replace with the Wap project directory relative to the solution, i.e. MyWpfApp.Package.
       # Deactivated Wap_Project_Path: your-wap-project-path                   # Replace with the path to your Wap project, i.e. MyWpf.App.Package\MyWpfApp.Package.wapproj.
-
     
     steps:
     - uses: actions/checkout@v4
@@ -34,7 +33,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v4
       with:
-        dotnet-version: '8.0.x' # Use latest LTS, adjust if your project uses a different version
+        dotnet-version: '9.0.x' # Use latest LTS, adjust if your project uses a different version
 
     # DEBUG
     - name: List files
