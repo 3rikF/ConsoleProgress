@@ -42,7 +42,7 @@ public sealed class ProgressProxyExtensionsTests
 	public void ConsoleProgressHandler_SingleCollectionConstructor_SetsAppropriateStrings()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		byte[] testData	 = [1, 2, 3, 4, 5];
+		byte[] testData = [1, 2, 3, 4, 5];
 
 		//--- ACT -------------------------------------------------------------
 		ConsoleProgressHandler<byte> sut = new(testData);
@@ -55,8 +55,11 @@ public sealed class ProgressProxyExtensionsTests
 		PropertyInfo? itemDescProperty = typeof(ProgressProxy<byte>)
 			.GetProperty("ItemDesc", BindingFlags.NonPublic | BindingFlags.Instance);
 
-		string? actionDesc	= actionDescProperty?.GetValue(sut) as string;
-		string? itemDesc	= itemDescProperty?.GetValue(sut) as string;
+		Assert.NotNull(actionDescProperty);
+		Assert.NotNull(itemDescProperty);
+
+		string actionDesc	= (string)actionDescProperty.GetValue(sut)!;
+		string itemDesc		= (string)itemDescProperty.GetValue(sut)!;
 
 		Assert.Null(actionDesc);
 		Assert.Null(itemDesc);
