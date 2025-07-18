@@ -31,14 +31,14 @@ public sealed class ConsoleTest : IConsole
 
 	/// <summary>
 	/// Will not create an exception when called with the real console during tests,
-	/// but will not be change the color either.
+	/// but will not change the color either.
 	/// </summary>
 	public ConsoleColor BackgroundColor
 		{ get; set; }
 
 	/// <summary>
 	/// Will not create an exception when called with the real console during tests,
-	/// but will not be change the color either.
+	/// but will not change the color either.
 	/// </summary>
 	public ConsoleColor ForegroundColor
 		{ get; set; }
