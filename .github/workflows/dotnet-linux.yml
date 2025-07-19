@@ -82,15 +82,15 @@ jobs:
 
       - name: Run Stryker Mutation Testing
         working-directory: ./ConsoleProgressBar
-        run: dotnet stryker
+        run: dotnet stryker --output reports #--reporters html --reporters progress --thresholds high --concurrency 4 --log-level info
 
       - name: Upload Stryker HTML Report Folder
         uses: actions/upload-artifact@v4
         with:
           name: stryker-html-report
           path: |
-            mutation-report.html
-            mutation/html/
+            reports/mutation-report.html
+            reports/mutation/html/
 
   nuget-pack-and-publish:
     if: github.event_name == 'push'
