@@ -81,7 +81,8 @@ jobs:
         run: dotnet tool install -g dotnet-stryker
 
       - name: Run Stryker Mutation Testing
-        run: dotnet stryker --solution $PROJECT_PATH # --reporters html --log-level debug --mutation-test-projects ./ConsoleProgressBar/ConsoleProgressBar.Tests/ConsoleProgressBar.Tests.csproj
+        working-directory: ./ConsoleProgressBar
+        run: dotnet stryker # --reporters html --log-level debug --mutation-test-projects ./ConsoleProgressBar/ConsoleProgressBar.Tests/ConsoleProgressBar.Tests.csproj
 
       - name: Upload Stryker HTML Report Folder
         uses: actions/upload-artifact@v4
