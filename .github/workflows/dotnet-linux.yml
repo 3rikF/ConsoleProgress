@@ -90,7 +90,8 @@ jobs:
           name: stryker-html-report
           path: |
             ConsoleProgressBar/reports/reports/mutation-report.html
-            ConsoleProgressBar/reports/reports/mutation/html/
+          # there is currently just a single report file, user the folder in case of multiple reports
+          #ConsoleProgressBar/reports/reports/mutation/html/
 
   nuget-pack-and-publish:
     if: github.event_name == 'push'
