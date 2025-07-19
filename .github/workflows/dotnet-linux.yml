@@ -60,7 +60,7 @@ jobs:
       run: dotnet restore $SOLUTION_NAME
 
     - name: Test
-      run: dotnet test $SOLUTION_NAME --verbosity normal
+      run: dotnet test $PROJECT_PATH --verbosity normal
       #working-directory: ./ConsoleProgressBar
 
 
