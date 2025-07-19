@@ -63,6 +63,35 @@ jobs:
       run: dotnet test $SOLUTION_NAME --verbosity normal
       #working-directory: ./ConsoleProgressBar
 
+
+  stryker-tests:
+    name: 'Mutation Testing (Stryker)'
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'    # Match your project's version
+
+      - name: Install Stryker
+        run: dotnet tool install -g dotnet-stryker
+
+      - name: Run Stryker Mutation Testing
+        run: dotnet stryker
+
+      - name: Upload Stryker HTML Report Folder
+        uses: actions/upload-artifact@v4
+        with:
+          name: stryker-html-report
+          path: |
+            reports/mutation-report.html
+
+          #reports/mutation/html/
+
   nuget-pack-and-publish:
     if: github.event_name == 'push'
     name: 'NuGet Pack and Publish'
