@@ -89,8 +89,8 @@ jobs:
         with:
           name: stryker-html-report
           path: |
-            StrykerOutput/reports/mutation-report.html
-            StrykerOutput/reports/mutation/html/
+            ConsoleProgressBar/reports/reports/mutation-report.html
+            ConsoleProgressBar/reports/reports/mutation/html/
 
   nuget-pack-and-publish:
     if: github.event_name == 'push'
