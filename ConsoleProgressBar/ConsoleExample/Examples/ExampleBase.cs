@@ -1,4 +1,5 @@
-﻿using System.Reflection;
+﻿
+using System.Reflection;
 
 using ConsoleProgressBar;
 
@@ -9,9 +10,8 @@ internal abstract class ExampleBase(string name, ExampleBase? header)
 	//--- Fields ------------------------------------------------------------------------------------------------------
 	private const int MAX_ITEMS = 1000;
 
-	private readonly ExampleBase? _header = header;
-	private readonly int[] _exampleCollection = Enumerable.Range(0, MAX_ITEMS).ToArray();
-
+	private readonly ExampleBase? _header		= header;
+	private readonly int[] _exampleCollection	= [.. Enumerable.Range(0, MAX_ITEMS)];
 
 	//--- Construction ------------------------------------------------------------------------------------------------
 	public void RunExample()
@@ -30,19 +30,16 @@ internal abstract class ExampleBase(string name, ExampleBase? header)
 	//--- Methods -----------------------------------------------------------------------------------------------------
 	protected abstract void ImplementExample();
 
-
 	protected static void RunParallel(IEnumerable<ProgressProxy<int>> bars, int maxIterations)
 	{
 		//--- parallel --------------------------------------------------------
-		IEnumerator<int>[] barsEnumerators = bars
-			.Select(bar => bar.GetEnumerator())
-			.ToArray();
+		IEnumerator<int>[] barsEnumerators = [.. bars.Select(bar => bar.GetEnumerator())];
 
 		for (int i = 0; i <= maxIterations; i++)
 		{
 			foreach (IEnumerator<int>? bar in barsEnumerators)
 			{
-				bar.MoveNext();
+				_ = bar.MoveNext();
 				Console.WriteLine();
 			}
 

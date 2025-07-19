@@ -4,7 +4,7 @@
 using ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace ConsoleProgressColorsTests;
+namespace ConsoleProgressBarTests;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 public sealed class ConsoleProgressColorsTests
@@ -19,7 +19,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor activeBar = ConsoleColor.Blue;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar) { Name = "Test" };
+		ConsoleProgressColors uut = new(activeBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -36,7 +36,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor fractionBar	= ConsoleColor.Cyan;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar) { Name = "Test" };
+		ConsoleProgressColors uut = new(activeBar, fractionBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -54,7 +54,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor inactiveBar = ConsoleColor.DarkCyan;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar, inactiveBar) { Name = "Test" };
+		ConsoleProgressColors uut = new(activeBar, fractionBar, inactiveBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -73,7 +73,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor background		= ConsoleColor.Black;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar, inactiveBar, background) { Name = "Test" };
+		ConsoleProgressColors uut = new(activeBar, fractionBar, inactiveBar, background) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,		uut.ActiveBar);

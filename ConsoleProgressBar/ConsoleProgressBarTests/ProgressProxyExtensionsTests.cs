@@ -15,14 +15,14 @@ public sealed class ProgressProxyExtensionsTests
 	public void WithDebugMode_ChangesConsoleToConsoleDebug()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		byte[] testData = [1, 2, 3, 4, 5];
-		ProgressProxy<byte> sut	= new ConsoleProgressHandler<byte>(testData);
+		byte[] testData			= [1, 2, 3, 4, 5];
+		ProgressProxy<byte> uut	= new ConsoleProgressHandler<byte>(testData);
 
 		//--- ACT -------------------------------------------------------------
-		sut = sut.WithTestMode();
+		uut = uut.WithTestMode();
 
 		//--- ASSERT ----------------------------------------------------------
-		_ = Assert.IsType<ConsoleTest>(sut.Console);
+		_ = Assert.IsType<ConsoleTest>(uut.Console);
 	}
 
 	[Fact]
@@ -32,10 +32,10 @@ public sealed class ProgressProxyExtensionsTests
 		byte[] testData = [1, 2, 3, 4, 5];
 
 		//--- ACT -------------------------------------------------------------
-		ProgressProxy<byte> sut	= new ConsoleProgressHandler<byte>(testData);
+		ProgressProxy<byte> uut	= new ConsoleProgressHandler<byte>(testData);
 
 		//--- ASSERT ----------------------------------------------------------
-		_ = Assert.IsType<ConsoleReal>(sut.Console);
+		_ = Assert.IsType<ConsoleReal>(uut.Console);
 	}
 
 	[Fact]
@@ -45,7 +45,7 @@ public sealed class ProgressProxyExtensionsTests
 		byte[] testData = [1, 2, 3, 4, 5];
 
 		//--- ACT -------------------------------------------------------------
-		ConsoleProgressHandler<byte> sut = new(testData);
+		ConsoleProgressHandler<byte> uut = new(testData);
 
 		//--- ASSERT ----------------------------------------------------------
 		// Using reflection to access the protected properties
@@ -58,8 +58,8 @@ public sealed class ProgressProxyExtensionsTests
 		Assert.NotNull(actionDescProperty);
 		Assert.NotNull(itemDescProperty);
 
-		string actionDesc	= (string)actionDescProperty.GetValue(sut)!;
-		string itemDesc		= (string)itemDescProperty.GetValue(sut)!;
+		string actionDesc	= (string)actionDescProperty.GetValue(uut)!;
+		string itemDesc		= (string)itemDescProperty.GetValue(uut)!;
 
 		Assert.Null(actionDesc);
 		Assert.Null(itemDesc);

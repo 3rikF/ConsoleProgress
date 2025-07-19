@@ -1,5 +1,6 @@
 
 using System.Text;
+
 using ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -12,14 +13,14 @@ public sealed class TestConsoleTests
 	public void OutputEncoding_GetSet_ForwardsToConsole()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut			= new();
+		ConsoleTest uut				= new();
 		Encoding originalEncoding	= Console.OutputEncoding;
 		Encoding expectedEncoding	= Encoding.UTF8;
 
 		try
 		{
 			//--- ACT -------------------------------------------------------------
-			uut.OutputEncoding = expectedEncoding;
+			uut.OutputEncoding		= expectedEncoding;
 			Encoding actualEncoding = uut.OutputEncoding;
 
 			//--- ASSERT ----------------------------------------------------------
@@ -39,7 +40,7 @@ public sealed class TestConsoleTests
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut						= new();
 		const ConsoleColor EXPECTED_COLOR	= ConsoleColor.Magenta;
-		var originalConsoleColor			= Console.ForegroundColor;
+		ConsoleColor originalConsoleColor	= Console.ForegroundColor;
 
 		//--- ACT ------------------------------------------------------------
 		uut.ForegroundColor					= EXPECTED_COLOR;
@@ -48,7 +49,7 @@ public sealed class TestConsoleTests
 		Assert.Equal(EXPECTED_COLOR, uut.ForegroundColor);
 
 		//--- will not change the actual console color ---
-		// windows returns gray, linux returns -1
+		// windows returns gray, Linux returns -1
 		Assert.Equal(originalConsoleColor,	Console.ForegroundColor);
 	}
 
@@ -56,9 +57,9 @@ public sealed class TestConsoleTests
 	public void BackgroundColor_GetSet_ForwardsToConsole()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut				= new();
-		ConsoleColor expectedColor	= ConsoleColor.DarkCyan;
-		var originalConsoleColor	= Console.BackgroundColor;
+		ConsoleTest uut						= new();
+		ConsoleColor expectedColor			= ConsoleColor.DarkCyan;
+		ConsoleColor originalConsoleColor	= Console.BackgroundColor;
 
 		//--- ACT ---------------------------------------------------------
 		uut.BackgroundColor = expectedColor;
@@ -74,7 +75,7 @@ public sealed class TestConsoleTests
 	public void WindowWidth_Get_ReturnsDebugConsoleWidth()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut	= new();
+		ConsoleTest uut		= new();
 		int expectedWidth	= ConsoleTest.DEBUG_CONSOLE_WIDTH;
 
 		//--- ACT -------------------------------------------------------------
@@ -88,7 +89,7 @@ public sealed class TestConsoleTests
 	public void CursorLeft_GetSet_RetainsValue()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut		= new();
+		ConsoleTest uut			= new();
 		int expectedPosition	= 42;
 
 		//--- ACT -------------------------------------------------------------
@@ -103,7 +104,7 @@ public sealed class TestConsoleTests
 	public void CursorTop_GetSet_RetainsValue()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut		= new();
+		ConsoleTest uut			= new();
 		int expectedPosition	= 24;
 
 		//--- ACT -------------------------------------------------------------
@@ -150,9 +151,9 @@ public sealed class TestConsoleTests
 	{
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut				= new();
-		const string TEST_TEXT			= "Test string";
-		StringWriter consoleOutput		= new();
-		TextWriter originalOutput		= Console.Out;
+		const string TEST_TEXT		= "Test string";
+		StringWriter consoleOutput	= new();
+		TextWriter originalOutput	= Console.Out;
 
 		try
 		{
@@ -177,10 +178,10 @@ public sealed class TestConsoleTests
 	{
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut				= new();
-		const char TEST_CHAR			= 'X';
-		const string EXPECTED_TEXT		= "X";
-		StringWriter consoleOutput		= new();
-		TextWriter originalOutput		= Console.Out;
+		const char TEST_CHAR		= 'X';
+		const string EXPECTED_TEXT	= "X";
+		StringWriter consoleOutput	= new();
+		TextWriter originalOutput	= Console.Out;
 
 		try
 		{
@@ -205,9 +206,9 @@ public sealed class TestConsoleTests
 	{
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut				= new();
-		string expectedText				= Environment.NewLine;
-		StringWriter consoleOutput		= new();
-		TextWriter originalOutput		= Console.Out;
+		string expectedText			= Environment.NewLine;
+		StringWriter consoleOutput	= new();
+		TextWriter originalOutput	= Console.Out;
 
 		try
 		{
@@ -231,11 +232,11 @@ public sealed class TestConsoleTests
 	public void WriteLine_String_ForwardsToConsole()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		const string TEST_TEXT			= "Test string";
-		string expectedText				= TEST_TEXT + Environment.NewLine;
+		const string TEST_TEXT		= "Test string";
+		string expectedText			= TEST_TEXT + Environment.NewLine;
 		ConsoleTest uut				= new();
-		StringWriter consoleOutput		= new();
-		TextWriter originalOutput		= Console.Out;
+		StringWriter consoleOutput	= new();
+		TextWriter originalOutput	= Console.Out;
 
 		try
 		{

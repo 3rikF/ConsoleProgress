@@ -1,8 +1,8 @@
 ﻿// See https://aka.ms/new-console-template for more information
 using ConsoleExample.Examples;
 
-Header header = new ();
-ExampleBase[] examples =
+Header header			= new ();
+ExampleBase[] examples	=
 [
 	new DefaultStylesExample("[1/4] Default Styles Example", header),
 	new CustomStylesExample("[2/4] Custom Styles Example", header),
@@ -10,6 +10,6 @@ ExampleBase[] examples =
 	new RandomColorsandStyleExample("[4/4] Random Bars Example", header),
 ];
 
-PageInteraction interaction = new PageInteraction(examples.Length);
+PageInteraction interaction = new(examples.Length);
 interaction.ShowPage += iPage => examples[iPage].RunExample();
 interaction.Start();

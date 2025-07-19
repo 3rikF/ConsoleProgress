@@ -13,7 +13,7 @@ public class ConsoleProgressStyleTests
 		//--- ARRANGE ---------------------------------------------------------
 		const bool TEST_SHOWFRACTIONS			= true;
 		const bool TEST_SHOWFRAME				= false;
-		const string TEST_FRAMELEFT			= "<";
+		const string TEST_FRAMELEFT				= "<";
 		const string TEST_FRAMERIGHT			= ">";
 		const char TEST_CHAREMPTY				= '-';
 		const char TEST_CHARDONE				= '+';
