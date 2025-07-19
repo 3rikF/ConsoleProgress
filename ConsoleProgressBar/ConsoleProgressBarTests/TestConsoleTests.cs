@@ -1,5 +1,6 @@
 
 using System.Text;
+
 using ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
@@ -39,7 +40,7 @@ public sealed class TestConsoleTests
 		//--- ARRANGE ---------------------------------------------------------
 		ConsoleTest uut						= new();
 		const ConsoleColor EXPECTED_COLOR	= ConsoleColor.Magenta;
-		var originalConsoleColor			= Console.ForegroundColor;
+		ConsoleColor originalConsoleColor	= Console.ForegroundColor;
 
 		//--- ACT ------------------------------------------------------------
 		uut.ForegroundColor					= EXPECTED_COLOR;
@@ -56,9 +57,9 @@ public sealed class TestConsoleTests
 	public void BackgroundColor_GetSet_ForwardsToConsole()
 	{
 		//--- ARRANGE ---------------------------------------------------------
-		ConsoleTest uut				= new();
-		ConsoleColor expectedColor	= ConsoleColor.DarkCyan;
-		var originalConsoleColor	= Console.BackgroundColor;
+		ConsoleTest uut						= new();
+		ConsoleColor expectedColor			= ConsoleColor.DarkCyan;
+		ConsoleColor originalConsoleColor	= Console.BackgroundColor;
 
 		//--- ACT ---------------------------------------------------------
 		uut.BackgroundColor = expectedColor;

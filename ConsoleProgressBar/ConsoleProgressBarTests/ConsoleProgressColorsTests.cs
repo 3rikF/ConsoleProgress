@@ -4,7 +4,7 @@
 using ConsoleProgressBar;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
-namespace ConsoleProgressColorsTests;
+namespace ConsoleProgressBarTests;
 
 //-----------------------------------------------------------------------------------------------------------------------------------------
 public sealed class ConsoleProgressColorsTests
@@ -16,10 +16,10 @@ public sealed class ConsoleProgressColorsTests
 	public void CTor_SingleColor()
 	{
 		//--- Arrange ---------------------------------------------------------
-		ConsoleColor activeBar = ConsoleColor.Blue;
+		ConsoleColor activeBar		= ConsoleColor.Blue;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar) { Name = "Test" };
+		ConsoleProgressColors uut	= new(activeBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -36,7 +36,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor fractionBar	= ConsoleColor.Cyan;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar) { Name = "Test" };
+		ConsoleProgressColors uut	= new(activeBar, fractionBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -49,12 +49,12 @@ public sealed class ConsoleProgressColorsTests
 	public void Ctor_ActiveInactiveAndFractionColor()
 	{
 		//--- Arrange ---------------------------------------------------------
-		ConsoleColor activeBar = ConsoleColor.Blue;
-		ConsoleColor fractionBar = ConsoleColor.Cyan;
-		ConsoleColor inactiveBar = ConsoleColor.DarkCyan;
+		ConsoleColor activeBar		= ConsoleColor.Blue;
+		ConsoleColor fractionBar	= ConsoleColor.Cyan;
+		ConsoleColor inactiveBar	= ConsoleColor.DarkCyan;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar, inactiveBar) { Name = "Test" };
+		ConsoleProgressColors uut	= new(activeBar, fractionBar, inactiveBar) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,											uut.ActiveBar);
@@ -73,7 +73,7 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleColor background		= ConsoleColor.Black;
 
 		//--- Act -------------------------------------------------------------
-		ConsoleProgressColors uut = new ConsoleProgressColors(activeBar, fractionBar, inactiveBar, background) { Name = "Test" };
+		ConsoleProgressColors uut = new(activeBar, fractionBar, inactiveBar, background) { Name = "Test" };
 
 		//--- Assert ----------------------------------------------------------
 		Assert.Equal(activeBar,		uut.ActiveBar);
@@ -114,14 +114,14 @@ public sealed class ConsoleProgressColorsTests
 		ConsoleProgressColors clone = original with { Name = "Clone" };
 
 		//--- ASSERT ----------------------------------------------------------
-		Assert.NotSame( original, clone );
-		Assert.Equal( original.ActiveBar, clone.ActiveBar );
-		Assert.Equal( original.FractionBar, clone.FractionBar );
-		Assert.Equal( original.InactiveBar, clone.InactiveBar );
-		Assert.Equal( original.Background, clone.Background );
-		Assert.NotEqual( original.Name, clone.Name );
-		Assert.Equal( "Original", original.Name );
-		Assert.Equal( "Clone", clone.Name );
+		Assert.NotSame( original,			clone );
+		Assert.Equal( original.ActiveBar,	clone.ActiveBar );
+		Assert.Equal( original.FractionBar,	clone.FractionBar );
+		Assert.Equal( original.InactiveBar,	clone.InactiveBar );
+		Assert.Equal( original.Background,	clone.Background );
+		Assert.NotEqual( original.Name,		clone.Name );
+		Assert.Equal( "Original",			original.Name );
+		Assert.Equal( "Clone",				clone.Name );
 	}
 
 	#endregion Test Methods
