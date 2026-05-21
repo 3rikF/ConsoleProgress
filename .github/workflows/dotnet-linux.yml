@@ -1,5 +1,8 @@
 name: .NET Linux Build & Test
 
+permissions:
+  contents: read
+
 env:
   # Replace with your solution name, i.e. MyWpfApp.sln.
   SOLUTION_NAME: "./ConsoleProgressBar/ConsoleProgressBar.sln"
